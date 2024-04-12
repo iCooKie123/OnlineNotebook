@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using OnlineNotebook.DatabaseConfigurations;
 
 namespace OnlineNotebook
 {
@@ -14,6 +17,10 @@ namespace OnlineNotebook
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddDbContext<DatabaseContext>(options =>
+                options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=master;Trusted_Connection=True;")
+                );
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -22,7 +29,7 @@ namespace OnlineNotebook
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
