@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using DTOs;
 using Microsoft.EntityFrameworkCore;
+using OnlineNotebook.Controllers.CustomExceptions;
 using OnlineNotebook.DatabaseConfigurations;
 using OnlineNotebook.DatabaseConfigurations.Entities;
 using OnlineNotebook.DTOs;
 using OnlineNotebook.Services.Abstractions;
+using System.Linq;
 
 namespace OnlineNotebook.Services
 {
@@ -35,9 +37,22 @@ namespace OnlineNotebook.Services
             return _mapper.Map<IEnumerable<UserDTO>>(users);
         }
 
-        public Task<LoginDTO> Login(string email, string password)
+        public async Task<LoginDTO> Login(string email, string password)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.Users.Where(u => u.Email == email && u.Password == password).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                throw new ForbiddenException("The email or the password was incorrect");
+            }
+
+            return new LoginDTO()
+            {
+                Email = user.Email,
+                FirstName = "test",
+                LastName = "test",
+                Role = "test"
+            };
         }
 
         public void UpdateUser(User user)

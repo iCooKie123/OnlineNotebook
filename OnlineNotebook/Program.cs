@@ -39,13 +39,16 @@ namespace OnlineNotebook
 
             var app = builder.Build();
 
-            //using (var scope = app.Services.CreateScope())
+            //if (!builder.Environment.IsProduction())
             //{
-            //    var services = scope.ServiceProvider;
+            //    using (var scope = app.Services.CreateScope())
+            //    {
+            //        var services = scope.ServiceProvider;
 
-            //    var context = services.GetRequiredService<DatabaseContext>();
+            //        var context = services.GetRequiredService<DatabaseContext>();
 
-            //    context.Database.Migrate();
+            //        context.Database.Migrate();
+            //    }
             //}
 
             // Configure the HTTP request pipeline.
@@ -54,6 +57,14 @@ namespace OnlineNotebook
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors(builder => builder.WithOrigins(
+            [
+                "http://localhost:5173"
+            ])
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 
             app.UseExceptionHandlingMiddleware();
 
