@@ -23,5 +23,12 @@ namespace OnlineNotebook.Controllers
             var response = await _userService.GetUsers();
             return Ok(JsonSerializer.Serialize(response));
         }
+
+        [HttpPut(Name = nameof(Login))]
+        public async Task<ActionResult<UserDTO>> Login()
+        {
+            var response = await _userService.Login();
+            return Ok(JsonSerializer.Serialize(response));
+        }
     }
 }

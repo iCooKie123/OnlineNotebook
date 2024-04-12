@@ -4,7 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.DependencyInjection;
-using OnlineNotebook.Controllers.CustomExceptions;
+using OnlineNotebook.Controllers.Helpers;
 using OnlineNotebook.DatabaseConfigurations;
 using OnlineNotebook.DatabaseConfigurations.Entities;
 using OnlineNotebook.Services;

@@ -1,7 +1,8 @@
 ﻿using System.Net;
 using System.Text.Json;
+using OnlineNotebook.Controllers.CustomExceptions;
 
-namespace OnlineNotebook.Controllers.CustomExceptions
+namespace OnlineNotebook.Controllers.Helpers
 {
     public class ExceptionHandlingMiddleware
     {

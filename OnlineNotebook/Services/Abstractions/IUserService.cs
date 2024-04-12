@@ -1,5 +1,6 @@
 ﻿using DTOs;
 using OnlineNotebook.DatabaseConfigurations.Entities;
+using OnlineNotebook.DTOs;
 
 namespace OnlineNotebook.Services.Abstractions
 {
@@ -12,5 +13,7 @@ namespace OnlineNotebook.Services.Abstractions
         public void UpdateUser(User user);
 
         public void AddUser(User user);
+
+        public LoginDTO Login(string email, string password);
     }
 }
