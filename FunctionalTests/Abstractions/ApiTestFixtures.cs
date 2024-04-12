@@ -37,5 +37,5 @@ public abstract class ApiTestFixture<TContextService, TContextImplementation, TP
 
             builder.AddConfiguration(config);
         })
-        .ConfigureServices(services => ConfigureServices(services));
+        .ConfigureServices(ConfigureServices);
 }

@@ -1,6 +1,7 @@
 ﻿using DTOs;
 using Microsoft.AspNetCore.Mvc;
 using OnlineNotebook.Services.Abstractions;
+using System.Text.Json;
 
 namespace OnlineNotebook.Controllers
 {
@@ -16,10 +17,11 @@ namespace OnlineNotebook.Controllers
             _userService = userService;
         }
 
-        [HttpGet("/all")]
+        [HttpGet(Name = nameof(GetUsers))]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
-            return Ok(await _userService.GetUsers());
+            var response = await _userService.GetUsers();
+            return Ok(JsonSerializer.Serialize(response));
         }
     }
 }
