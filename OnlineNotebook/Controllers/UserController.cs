@@ -1,5 +1,6 @@
 ﻿using DTOs;
 using Microsoft.AspNetCore.Mvc;
+using OnlineNotebook.Requests;
 using OnlineNotebook.Services.Abstractions;
 using System.Text.Json;
 
@@ -25,9 +26,9 @@ namespace OnlineNotebook.Controllers
         }
 
         [HttpPut(Name = nameof(Login))]
-        public async Task<ActionResult<UserDTO>> Login()
+        public async Task<ActionResult<UserDTO>> Login([FromBody] LoginRequest request)
         {
-            var response = await _userService.Login();
+            var response = await _userService.Login(request.Email, request.Password);
             return Ok(JsonSerializer.Serialize(response));
         }
     }

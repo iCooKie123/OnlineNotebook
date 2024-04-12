@@ -3,6 +3,7 @@ using DTOs;
 using Microsoft.EntityFrameworkCore;
 using OnlineNotebook.DatabaseConfigurations;
 using OnlineNotebook.DatabaseConfigurations.Entities;
+using OnlineNotebook.DTOs;
 using OnlineNotebook.Services.Abstractions;
 
 namespace OnlineNotebook.Services
@@ -32,6 +33,11 @@ namespace OnlineNotebook.Services
         {
             var users = await _dbContext.Users.ToListAsync();
             return _mapper.Map<IEnumerable<UserDTO>>(users);
+        }
+
+        public Task<LoginDTO> Login(string email, string password)
+        {
+            throw new NotImplementedException();
         }
 
         public void UpdateUser(User user)

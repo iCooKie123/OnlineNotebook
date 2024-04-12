@@ -14,6 +14,6 @@ namespace OnlineNotebook.Services.Abstractions
 
         public void AddUser(User user);
 
-        public LoginDTO Login(string email, string password);
+        public Task<LoginDTO> Login(string email, string password);
     }
 }

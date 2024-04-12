@@ -29,8 +29,7 @@ namespace OnlineNotebook.Controllers.Helpers
                 context.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 await context.Response.WriteAsync(ex.Message);
             }
-            // Handle other custom exception types here
-            catch (Exception ex)
+            catch (Exception)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 await context.Response.WriteAsync("An unexpected error occurred.");
