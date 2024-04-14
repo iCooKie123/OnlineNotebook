@@ -8,6 +8,7 @@ namespace OnlineNotebook.Extensions
         public static void AddCustomServices(this IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
+            //services.AddMediatR(cf => cf.RegisterServicesFromAssembly(typeof(Program).Assembly));
         }
     }
 }

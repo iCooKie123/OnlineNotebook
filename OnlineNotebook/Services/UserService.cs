@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using DTOs;
 using Microsoft.EntityFrameworkCore;
+using OnlineNotebook.Commands;
 using OnlineNotebook.Controllers.CustomExceptions;
 using OnlineNotebook.DatabaseConfigurations;
 using OnlineNotebook.DatabaseConfigurations.Entities;
-using OnlineNotebook.DTOs;
 using OnlineNotebook.Services.Abstractions;
 using System.Linq;
 
@@ -26,9 +25,12 @@ namespace OnlineNotebook.Services
             throw new NotImplementedException();
         }
 
-        public User GetUserByEmail(string email)
+        public Task<UserDTO> GetUserByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(x => x.Email == email);
+            return user != null ?
+                Task.FromResult(_mapper.Map<UserDTO>(user)) :
+                throw new NotFoundException("user not found");
         }
 
         public async Task<IEnumerable<UserDTO>> GetUsers()
@@ -49,9 +51,8 @@ namespace OnlineNotebook.Services
             return new LoginDTO()
             {
                 Email = user.Email,
-                FirstName = "test",
-                LastName = "test",
-                Role = "test"
+                FirstName = user.FirstName,
+                LastName = user.LastName,
             };
         }
 

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using DTOs;
 using OnlineNotebook.DatabaseConfigurations.Entities;
 
 namespace OnlineNotebook.Extensions

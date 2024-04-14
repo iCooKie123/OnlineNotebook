@@ -1,17 +1,25 @@
-using AutoMapper;
-using DTOs;
-using Microsoft.AspNetCore.Mvc;
-using OnlineNotebook.DatabaseConfigurations;
+using MediatR;
 using OnlineNotebook.Services.Abstractions;
 
-public class GetUsersQuery
+public class GetUsersQuery : IRequest<IEnumerable<UserDTO>>
+{
+}
+
+public class UserDTO
+{
+    public string Email { get; set; }
+}
+
+public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, IEnumerable<UserDTO>>
 {
     private readonly IUserService _userService;
-    public GetUsersQuery(IUserService userService)
+
+    public GetUsersQueryHandler(IUserService userService)
     {
         _userService = userService;
     }
-    public async Task<IEnumerable<UserDTO>> Execute()
+
+    public async Task<IEnumerable<UserDTO>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
         return await _userService.GetUsers();
     }

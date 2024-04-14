@@ -1,5 +1,4 @@
 using AutoMapper;
-using DTOs;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -31,6 +30,7 @@ namespace OnlineNotebook
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddSingleton<IMapper>(mapper);
+            builder.Services.AddMediatR(cf => cf.RegisterServicesFromAssembly(typeof(Program).Assembly));
             builder.Services.AddCustomServices();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

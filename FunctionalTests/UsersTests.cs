@@ -1,4 +1,3 @@
-using DTOs;
 using FluentAssertions;
 using FunctionalTests.Abstractions;
 using OnlineNotebook;
@@ -15,12 +14,11 @@ namespace FunctionalTests
     {
         private readonly List<User> TestUsers =
             [
-                new User()
-                {
-                    Id=1,
-                    Email="test.com",
-                    Password="test.com"
-                }
+                new User("test.com","test","FirstNameTest","LastNameTest"),
+                new User("test.com","test","FirstNameTest","LastNameTest"),
+                new User("test.com","test","FirstNameTest","LastNameTest"),
+                new User("test.com","test","FirstNameTest","LastNameTest"),
+
             ];
 
         [Fact]
@@ -30,7 +28,7 @@ namespace FunctionalTests
 
             var response = await Client.GetAsync("users");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            var actual = await response.Content.ReadFromJsonAsync<List<UserDTO>>(JsonSerializerOptions.Default);
+            var actual = await response.Content.ReadFromJsonAsync<List<UserDTO>>(DefaultOptions);
 
             actual.Should().NotBeNull();
             actual?.Count.Should().Be(TestUsers.Count);

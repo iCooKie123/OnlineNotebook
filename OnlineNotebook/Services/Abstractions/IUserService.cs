@@ -1,6 +1,5 @@
-﻿using DTOs;
+﻿using OnlineNotebook.Commands;
 using OnlineNotebook.DatabaseConfigurations.Entities;
-using OnlineNotebook.DTOs;
 
 namespace OnlineNotebook.Services.Abstractions
 {
@@ -8,7 +7,7 @@ namespace OnlineNotebook.Services.Abstractions
     {
         public Task<IEnumerable<UserDTO>> GetUsers();
 
-        public User GetUserByEmail(string email);
+        public Task<UserDTO> GetUserByEmailAsync(string email);
 
         public void UpdateUser(User user);
 

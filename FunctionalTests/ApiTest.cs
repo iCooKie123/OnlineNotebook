@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using OnlineNotebook;
 using OnlineNotebook.DatabaseConfigurations;
+using System;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FunctionalTests.Abstractions;
 
@@ -46,8 +50,16 @@ public abstract class ApiTest : ApiTests<ApiTestFixture, IDatabaseContext, Datab
 {
     public IMapper Mapper { get; }
 
+    public JsonSerializerOptions DefaultOptions { get; }
+
     protected ApiTest(ApiTestFixture factory) : base(factory)
     {
         Mapper = Services.GetRequiredService<IMapper>();
+
+        DefaultOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+        };
     }
 }

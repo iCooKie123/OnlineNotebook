@@ -6,13 +6,31 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
     public class User : Entity
     {
         [Required]
-        public string Email { get; set; }
+        public string Email { get; private set; }
 
         [Required]
-        public string Password { get; set; }
+        public string Password { get; private set; }
+
+        [Required]
+        public string FirstName { get; private set; }
+
+        [Required]
+        public string LastName { get; private set; }
+
+        public User(string email, string password, string firstName, string lastName)
+        {
+            Email = email;
+            Password = password;
+            FirstName = firstName;
+            LastName = lastName;
+        }
 
         public void UpdateEmail(string email) => Email = email;
 
         public void UpdatePassword(string password) => Password = password;
+
+        public void UpdateFirstName(string firstName) => FirstName = firstName;
+
+        public void UpdateLastName(string lastName) => LastName = lastName;
     }
 }
