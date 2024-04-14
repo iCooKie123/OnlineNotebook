@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using OnlineNotebook.Commands;
@@ -21,9 +22,11 @@ namespace OnlineNotebook.Controllers
             _mediator = mediator;
         }
 
+        [Authorize]
         [HttpGet(Name = nameof(GetUsers))]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers() => Ok(await _mediator.Send(new GetUsersQuery()));
 
+        [AllowAnonymous]
         [HttpPut("login", Name = nameof(Login))]
         public async Task<ActionResult<UserDTO>> Login([FromBody] LoginCommand request) => Ok(await _mediator.Send(request));
     }
