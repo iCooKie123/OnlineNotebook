@@ -8,6 +8,10 @@ public class GetUsersQuery : IRequest<IEnumerable<UserDTO>>
 public class UserDTO
 {
     public string Email { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+
+    public int YearOfStudy { get; set; } = 2;
 }
 
 public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, IEnumerable<UserDTO>>

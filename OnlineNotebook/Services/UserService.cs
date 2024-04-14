@@ -39,7 +39,7 @@ namespace OnlineNotebook.Services
             return _mapper.Map<IEnumerable<UserDTO>>(users);
         }
 
-        public async Task<LoginDTO> Login(string email, string password)
+        public async Task<UserDTO> Login(string email, string password)
         {
             var user = await _dbContext.Users.Where(u => u.Email == email && u.Password == password).FirstOrDefaultAsync();
 
@@ -48,12 +48,7 @@ namespace OnlineNotebook.Services
                 throw new ForbiddenException("The email or the password was incorrect");
             }
 
-            return new LoginDTO()
-            {
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-            };
+           return  _mapper.Map<UserDTO>(user);
         }
 
         public void UpdateUser(User user)

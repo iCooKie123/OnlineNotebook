@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.IdentityModel.Tokens;
 using OnlineNotebook.Controllers.CustomExceptions;
 using OnlineNotebook.Services.Abstractions;
@@ -15,23 +16,23 @@ namespace OnlineNotebook.Commands
         public string? Password { get; set; }
     }
 
-    public class LoginDTO
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-    }
-
     public class LoginCommandHandler : IRequestHandler<LoginCommand, string>
     {
         public IUserService _userService { get; set; }
         public IConfiguration _configuration { get; set; }
+        public IMapper _mapper { get; set; }
+        private JsonSerializerOptions Options { get; set; }
 
-        public LoginCommandHandler(IUserService userService, IConfiguration configuration)
+        public LoginCommandHandler(IUserService userService, IConfiguration configuration, IMapper mapper)
         {
             _userService = userService;
             _configuration = configuration;
+            _mapper = mapper;
+
+            Options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
         }
 
         public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -47,7 +48,7 @@ namespace OnlineNotebook.Commands
             {
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("User", JsonSerializer.Serialize(user))
+                        new Claim("User", JsonSerializer.Serialize(user, Options))
             };
 
             var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]);
