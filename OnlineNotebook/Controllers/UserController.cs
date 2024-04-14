@@ -29,5 +29,9 @@ namespace OnlineNotebook.Controllers
         [AllowAnonymous]
         [HttpPut("login", Name = nameof(Login))]
         public async Task<ActionResult<UserDTO>> Login([FromBody] LoginCommand request) => Ok(await _mediator.Send(request));
+
+        [Authorize]
+        [HttpGet("validate-token", Name = nameof(ValidateToken))]
+        public async Task<ActionResult> ValidateToken() => Ok();
     }
 }
