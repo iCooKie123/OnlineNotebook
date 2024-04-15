@@ -1,10 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using OnlineNotebook.Commands;
 using OnlineNotebook.Services.Abstractions;
-using System.Text.Json;
 
 namespace OnlineNotebook.Controllers
 {
@@ -32,6 +30,6 @@ namespace OnlineNotebook.Controllers
 
         [Authorize]
         [HttpGet("validate-token", Name = nameof(ValidateToken))]
-        public async Task<ActionResult> ValidateToken() => Ok();
+        public ActionResult ValidateToken() => Ok();
     }
 }
