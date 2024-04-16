@@ -5,7 +5,9 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineNotebook", "OnlineNotebook\OnlineNotebook.csproj", "{5AC640E4-FA00-49BC-ABFE-B44B6AF8DB64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionalTests", "FunctionalTests\FunctionalTests.csproj", "{02AF7BB7-343D-4359-82F1-E572EAF8C992}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionalTests", "FunctionalTests\FunctionalTests.csproj", "{02AF7BB7-343D-4359-82F1-E572EAF8C992}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseData", "DatabaseData\DatabaseData.csproj", "{EC49861A-7D6B-40F1-9509-775EFA6526BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{02AF7BB7-343D-4359-82F1-E572EAF8C992}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02AF7BB7-343D-4359-82F1-E572EAF8C992}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02AF7BB7-343D-4359-82F1-E572EAF8C992}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC49861A-7D6B-40F1-9509-775EFA6526BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC49861A-7D6B-40F1-9509-775EFA6526BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC49861A-7D6B-40F1-9509-775EFA6526BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC49861A-7D6B-40F1-9509-775EFA6526BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

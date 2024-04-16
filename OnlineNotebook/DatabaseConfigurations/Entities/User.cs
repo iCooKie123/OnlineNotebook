@@ -17,12 +17,16 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
         [Required]
         public string LastName { get; private set; }
 
-        public User(string email, string password, string firstName, string lastName)
+        [Required]
+        public int? YearOfStudy { get; private set; }
+
+        public User(string email, string password, string firstName, string lastName, int? yearOfStudy)
         {
             Email = email;
             Password = password;
             FirstName = firstName;
             LastName = lastName;
+            YearOfStudy = yearOfStudy;
         }
 
         public void UpdateEmail(string email) => Email = email;
@@ -32,5 +36,7 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
         public void UpdateFirstName(string firstName) => FirstName = firstName;
 
         public void UpdateLastName(string lastName) => LastName = lastName;
+
+        public void UpdateYearOfStudy(int? yearOfStudy) => YearOfStudy = yearOfStudy;
     }
 }

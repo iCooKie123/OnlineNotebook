@@ -52,6 +52,7 @@ namespace OnlineNotebook.Commands
             };
 
             var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]);
+            var expiryMinutes = DateTime.UtcNow.AddMinutes(int.Parse(_configuration["JwtSettings:ExpirationHours"]) * 60);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),

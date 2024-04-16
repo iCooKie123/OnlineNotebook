@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineNotebook.DatabaseConfigurations.Entities;
 
 namespace OnlineNotebook.DatabaseConfigurations
 {
     public interface IDatabaseContext
     {
-        DbSet<TEntity> Set<TEntity>() where TEntity : class;
+        public DbSet<User> Users { get; set; }
+        public DbSet<StudyClass> Classes { get; set; }
+        public DbSet<StudentClass> StudentClases { get; set; }
 
         int SaveChanges();
     }

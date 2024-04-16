@@ -39,7 +39,7 @@ namespace OnlineNotebook
             builder.Services.AddCustomServices();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<DatabaseContext>(options =>
+            builder.Services.AddDbContext<IDatabaseContext, DatabaseContext>(options =>
                 options.UseSqlServer(connectionString));
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

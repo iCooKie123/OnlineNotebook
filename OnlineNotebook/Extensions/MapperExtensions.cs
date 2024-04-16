@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using OnlineNotebook.DatabaseConfigurations.Entities;
+using OnlineNotebook.Queries;
 
 namespace OnlineNotebook.Extensions
 {
@@ -8,6 +9,7 @@ namespace OnlineNotebook.Extensions
         public static void AddCustomMappings(this IMapperConfigurationExpression config)
         {
             config.CreateMap<User, UserDTO>();
+            config.CreateMap<StudentClass, GetStudentClassesQueryResponse>();
         }
     }
 }
