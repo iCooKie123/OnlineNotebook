@@ -2,6 +2,7 @@
 using OnlineNotebook.DatabaseConfigurations;
 using OnlineNotebook.DatabaseConfigurations.Entities;
 using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
+using System.Diagnostics;
 
 namespace DatabaseData
 {
@@ -132,30 +133,21 @@ namespace DatabaseData
 
                 var studentClasses = new List<StudentClass>();
 
-                for (int i = 0; i < 12; i++)
+                for (int i = 1; i < 4; i++)
                 {
-                    User user;
-                    if (i < 4)
-                    {
-                        user = users[0];
-                    }
-                    else if (i < 8)
-                    {
-                        user = users[1];
-                    }
-                    else
-                    {
-                        user = users[2];
-                    }
+                    var user = users[i - 1];
 
-                    int? grade = (user.Equals(users[1]) || user.Equals(users[0])) ? GetRandomGrade() : null;
-
-                    studentClasses.Add(new StudentClass
+                    for (int j = 0; j < 4 * i; j++)
                     {
-                        Student = user,
-                        Class = classes[i],
-                        Grade = grade
-                    });
+                        int? grade = GetRandomGrade();
+                        Console.WriteLine(grade);
+                        studentClasses.Add(new StudentClass
+                        {
+                            Student = user,
+                            Class = classes[j],
+                            Grade = grade
+                        });
+                    }
                 }
 
                 context.Classes.AddRange(classes);
