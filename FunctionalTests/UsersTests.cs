@@ -24,6 +24,8 @@ namespace FunctionalTests
         [Fact]
         public async Task GetUsersShouldReturnAllUsers()
         {
+            await Authenticate();
+
             await AddTestUsers();
 
             var response = await Client.GetAsync("users");

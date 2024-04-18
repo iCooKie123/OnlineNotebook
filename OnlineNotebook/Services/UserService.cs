@@ -43,12 +43,9 @@ namespace OnlineNotebook.Services
         {
             var user = await _dbContext.Users.Where(u => u.Email == email && u.Password == password).FirstOrDefaultAsync();
 
-            if (user == null)
-            {
-                throw new ForbiddenException("The email or the password was incorrect");
-            }
-
-           return  _mapper.Map<UserDTO>(user);
+            return user == null
+                ? throw new ForbiddenException("The email or the password was incorrect")
+                : _mapper.Map<UserDTO>(user);
         }
 
         public void UpdateUser(User user)

@@ -10,7 +10,7 @@ namespace OnlineNotebook.Controllers
     [Route(Route)]
     public class UserController : ControllerBase
     {
-        private const string Route = "users";
+        public const string Route = "users";
         private readonly IUserService _userService;
         private readonly IMediator _mediator;
 
@@ -26,7 +26,7 @@ namespace OnlineNotebook.Controllers
 
         [AllowAnonymous]
         [HttpPut("login", Name = nameof(Login))]
-        public async Task<ActionResult<UserDTO>> Login([FromBody] LoginCommand request) => Ok(await _mediator.Send(request));
+        public async Task<ActionResult<string>> Login([FromBody] LoginCommand request) => Ok(await _mediator.Send(request));
 
         [Authorize]
         [HttpGet("validate-token", Name = nameof(ValidateToken))]
