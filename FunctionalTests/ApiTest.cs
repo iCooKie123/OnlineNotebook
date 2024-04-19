@@ -70,7 +70,7 @@ public abstract class ApiTest : ApiTests<ApiTestFixture, IDatabaseContext, Datab
 
     public async Task Authenticate()
     {
-        var user = new User("test", "test", "test", "test", 1);
+        var user = new User("test", "test", "test", "test", 1, null, null, null, null);
         {
         }
 

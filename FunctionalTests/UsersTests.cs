@@ -14,10 +14,10 @@ namespace FunctionalTests
     {
         private readonly List<User> TestUsers =
             [
-                new User("test.com","test","FirstNameTest","LastNameTest",1),
-                new User("test.com","test","FirstNameTest","LastNameTest",1),
-                new User("test.com","test","FirstNameTest","LastNameTest",1),
-                new User("test.com","test","FirstNameTest","LastNameTest",1),
+                new User("test.com","test","FirstNameTest","LastNameTest",1,null,null,null,null),
+                new User("test.com","test","FirstNameTest","LastNameTest",1,null,null,null,null),
+                new User("test.com","test","FirstNameTest","LastNameTest",1,null,null,null,null),
+                new User("test.com","test","FirstNameTest","LastNameTest",1,null,null,null,null),
 
             ];
 
