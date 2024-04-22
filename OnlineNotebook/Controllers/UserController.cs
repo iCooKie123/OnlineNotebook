@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineNotebook.Commands;
+using OnlineNotebook.Queries;
 using OnlineNotebook.Services.Abstractions;
 
 namespace OnlineNotebook.Controllers

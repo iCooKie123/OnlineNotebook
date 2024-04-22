@@ -1,6 +1,8 @@
 using MediatR;
 using OnlineNotebook.Services.Abstractions;
 
+namespace OnlineNotebook.Queries;
+
 public class GetUsersQuery : IRequest<IEnumerable<UserDTO>>
 {
 }
@@ -11,8 +13,11 @@ public class UserDTO
     public string Email { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-
-    public int YearOfStudy { get; set; } = 2;
+    public string? LearningCycle { get; set; }
+    public string? Faculty { get; set; }
+    public string? Specialization { get; set; }
+    public string? Group { get; set; }
+    public int? YearOfStudy { get; set; }
 }
 
 public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, IEnumerable<UserDTO>>

@@ -21,13 +21,13 @@ namespace DatabaseData
                 // Insert data
                 var users = new List<User>
                 {
-                    new("johnDoe@test.com","password123","John","Doe",1,null,null,null,null)
+                    new("johnDoe@test.com","password123","John","Doe",1,"Licență","FSA","Mate-Info","1311")
                     {
                     },
-                    new("johnDoe2@test.com","password123","John2","Doe",2,null,null,null,null)
+                    new("johnDoe2@test.com","password123","John2","Doe",2,"Licență","FSA","Mate-Info","1323")
                     {
                     },
-                    new("johnDoe3@test.com", "password123", "John3", "Doe", 3, null, null, null, null)
+                    new("johnDoe3@test.com", "password123", "John3", "Doe", 3,"Licență","FSA","Mate-Info", "1333")
                     {
                     },
                 };

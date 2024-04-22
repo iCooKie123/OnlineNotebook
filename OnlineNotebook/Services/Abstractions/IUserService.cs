@@ -1,5 +1,6 @@
 ﻿using OnlineNotebook.Commands;
 using OnlineNotebook.DatabaseConfigurations.Entities;
+using OnlineNotebook.Queries;
 
 namespace OnlineNotebook.Services.Abstractions
 {

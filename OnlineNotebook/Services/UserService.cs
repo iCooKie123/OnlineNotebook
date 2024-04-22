@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using OnlineNotebook.Commands;
 using OnlineNotebook.Controllers.CustomExceptions;
 using OnlineNotebook.DatabaseConfigurations;
 using OnlineNotebook.DatabaseConfigurations.Entities;
+using OnlineNotebook.Queries;
 using OnlineNotebook.Services.Abstractions;
-using System.Linq;
 
 namespace OnlineNotebook.Services
 {

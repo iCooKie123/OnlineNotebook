@@ -17,15 +17,14 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
         [Required]
         public string LastName { get; private set; }
 
-        [Required]
         public int? YearOfStudy { get; private set; }
         public string? LearningCycle { get; set; }
-        public string? Faculty { get;private set; }
-        public string? Specialty { get; private set; }
+        public string? Faculty { get; private set; }
+        public string? Specialization { get; private set; }
         public string? Group { get; private set; }
 
         public User(string email, string password, string firstName, string lastName, int? yearOfStudy,
-                    string? learningCycle, string? faculty, string? specialty, string? group)
+                    string? learningCycle, string? faculty, string? specialization, string? group)
         {
             Email = email;
             Password = password;
@@ -34,7 +33,7 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
             YearOfStudy = yearOfStudy;
             LearningCycle = learningCycle;
             Faculty = faculty;
-            Specialty = specialty;
+            Specialization = specialization;
             Group = group;
         }
 
