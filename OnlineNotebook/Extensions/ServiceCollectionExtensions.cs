@@ -1,8 +1,5 @@
-﻿using OnlineNotebook.Services.Abstractions;
-using OnlineNotebook.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+﻿using OnlineNotebook.Services;
+using OnlineNotebook.Services.Abstractions;
 
 namespace OnlineNotebook.Extensions
 {

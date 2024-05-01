@@ -1,5 +1,4 @@
-﻿using OnlineNotebook.Commands;
-using OnlineNotebook.DatabaseConfigurations.Entities;
+﻿using OnlineNotebook.DatabaseConfigurations.Entities;
 using OnlineNotebook.Queries;
 
 namespace OnlineNotebook.Services.Abstractions
@@ -15,5 +14,6 @@ namespace OnlineNotebook.Services.Abstractions
         public void AddUser(User user);
 
         public Task<UserDTO> Login(string email, string password);
+        public Task<string> UpdateUserPassword(string oldPassword, string newPassword, int? userId);
     }
 }

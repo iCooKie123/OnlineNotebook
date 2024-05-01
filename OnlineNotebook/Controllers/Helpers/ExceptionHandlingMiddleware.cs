@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Text.Json;
 using OnlineNotebook.Controllers.CustomExceptions;
 
 namespace OnlineNotebook.Controllers.Helpers
@@ -34,7 +33,9 @@ namespace OnlineNotebook.Controllers.Helpers
 
     public static class ExceptionHandlingMiddlewareExtensions
     {
-        public static IApplicationBuilder UseExceptionHandlingMiddleware(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseExceptionHandlingMiddleware(
+            this IApplicationBuilder builder
+        )
         {
             return builder.UseMiddleware<ExceptionHandlingMiddleware>();
         }

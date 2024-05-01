@@ -1,11 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Text.Json;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineNotebook.Controllers.CustomExceptions;
-using OnlineNotebook.DatabaseConfigurations.Entities;
 using OnlineNotebook.Queries;
-using System.Text.Json;
 
 namespace OnlineNotebook.Controllers
 {
@@ -29,12 +27,17 @@ namespace OnlineNotebook.Controllers
 
         [Authorize]
         [HttpGet("all", Name = nameof(GetAllStudentClasses))]
-        public async Task<ActionResult<IEnumerable<GetStudentClassesQueryResponse>>> GetAllStudentClasses()
+        public async Task<
+            ActionResult<IEnumerable<GetStudentClassesQueryResponse>>
+        > GetAllStudentClasses()
         {
             var userClaim = User.FindFirst("User")?.Value;
             var userDeserialized = JsonSerializer.Deserialize<UserDTO>(userClaim, _options);
+            if (userDeserialized.Id == null)
+            {
+                throw new ForbiddenException("Student Id was null");
+            }
             var userId = userDeserialized.Id;
-            //throw new ForbiddenException("Student Id was null");
 
             return Ok(await _mediator.Send(new GetStudentClassesQuery().WithStudentId(userId)));
         }
