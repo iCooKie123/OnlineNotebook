@@ -1,16 +1,14 @@
+using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OnlineNotebook.Controllers.Helpers;
 using OnlineNotebook.DatabaseConfigurations;
 using OnlineNotebook.Extensions;
-using System.Text;
 
 namespace OnlineNotebook
-
 {
     public class Program
     {
@@ -27,36 +25,49 @@ namespace OnlineNotebook
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c => c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                Description = "JWT Authorization header using the Bearer scheme",
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer"
-            }));
+            builder.Services.AddSwaggerGen(c =>
+                c.AddSecurityDefinition(
+                    "Bearer",
+                    new OpenApiSecurityScheme
+                    {
+                        Description = "JWT Authorization header using the Bearer scheme",
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer"
+                    }
+                )
+            );
 
             builder.Services.AddSingleton<IMapper>(mapper);
-            builder.Services.AddMediatR(cf => cf.RegisterServicesFromAssembly(typeof(Program).Assembly));
+            builder.Services.AddMediatR(cf =>
+                cf.RegisterServicesFromAssembly(typeof(Program).Assembly)
+            );
             builder.Services.AddCustomServices();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<IDatabaseContext, DatabaseContext>(options =>
-                options.UseSqlServer(connectionString));
-
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters()
+                options.UseSqlServer(connectionString)
+            );
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+            Console.WriteLine(builder.Configuration["JwtSettings:Key"]);
+            builder
+                .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = builder.Configuration["JwtSettings:Audience"],
-                    ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.FromSeconds(5),
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
-                };
-            });
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.FromSeconds(5),
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])
+                        )
+                    };
+                });
 
             var app = builder.Build();
 
@@ -80,11 +91,7 @@ namespace OnlineNotebook
                 app.UseSwaggerUI();
             }
 
-            app.UseCors(builder =>
-            builder
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             //.AllowCredentials());
             //builder.WithOrigins(
             //[
