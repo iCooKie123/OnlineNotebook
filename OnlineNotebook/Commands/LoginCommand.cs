@@ -48,7 +48,8 @@ namespace OnlineNotebook.Commands
             {
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("User", JsonSerializer.Serialize(user, Options))
+                        new Claim("User", JsonSerializer.Serialize(user, Options)),
+                        new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 
             var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]);

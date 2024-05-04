@@ -40,6 +40,7 @@ namespace OnlineNotebook.Services
 
         public async Task<UserDTO> Login(string email, string password)
         {
+            // throw new ForbiddenException("The email or the password was incorrect");
             var user = await _dbContext
                 .Users.Where(u => u.Email == email && u.Password == password)
                 .FirstOrDefaultAsync();
@@ -56,9 +57,9 @@ namespace OnlineNotebook.Services
 
         public Task<string> UpdateUserPassword(string oldPassword, string newPassword, int? userId)
         {
-            var user = _dbContext.Users.FirstOrDefault(x =>
-                x.Id == userId && x.Password == oldPassword
-            ) ?? throw new ForbiddenException("The old password was incorrect");
+            var user =
+                _dbContext.Users.FirstOrDefault(x => x.Id == userId && x.Password == oldPassword)
+                ?? throw new ForbiddenException("The old password was incorrect");
 
             user.UpdatePassword(newPassword);
             _dbContext.SaveChanges();

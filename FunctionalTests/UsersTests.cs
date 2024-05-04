@@ -1,12 +1,9 @@
-using FluentAssertions;
-using FunctionalTests.Abstractions;
-using OnlineNotebook;
-using OnlineNotebook.DatabaseConfigurations;
-using OnlineNotebook.DatabaseConfigurations.Entities;
-using OnlineNotebook.Queries;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text.Json;
+using FluentAssertions;
+using FunctionalTests.Abstractions;
+using OnlineNotebook.DatabaseConfigurations.Entities;
+using OnlineNotebook.Queries;
 
 namespace FunctionalTests
 {
@@ -14,13 +11,52 @@ namespace FunctionalTests
     public class UsersTests(ApiTestFixture factory) : ApiTest(factory)
     {
         private readonly List<User> TestUsers =
-            [
-                new User("test.com","test","FirstNameTest","LastNameTest",1,null,null,null,null),
-                new User("test.com","test","FirstNameTest","LastNameTest",1,null,null,null,null),
-                new User("test.com","test","FirstNameTest","LastNameTest",1,null,null,null,null),
-                new User("test.com","test","FirstNameTest","LastNameTest",1,null,null,null,null),
-
-            ];
+        [
+            new User(
+                "test.com",
+                "test",
+                "FirstNameTest",
+                "LastNameTest",
+                1,
+                null,
+                null,
+                null,
+                null
+            ),
+            new User(
+                "test.com",
+                "test",
+                "FirstNameTest",
+                "LastNameTest",
+                1,
+                null,
+                null,
+                null,
+                null
+            ),
+            new User(
+                "test.com",
+                "test",
+                "FirstNameTest",
+                "LastNameTest",
+                1,
+                null,
+                null,
+                null,
+                null
+            ),
+            new User(
+                "test.com",
+                "test",
+                "FirstNameTest",
+                "LastNameTest",
+                1,
+                null,
+                null,
+                null,
+                null
+            ),
+        ];
 
         [Fact]
         public async Task GetUsersShouldReturnAllUsers()

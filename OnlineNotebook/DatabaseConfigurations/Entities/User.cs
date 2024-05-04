@@ -1,5 +1,5 @@
-﻿using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
 
 namespace OnlineNotebook.DatabaseConfigurations.Entities
 {
@@ -22,9 +22,20 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
         public string? Faculty { get; private set; }
         public string? Specialization { get; private set; }
         public string? Group { get; private set; }
+        public UserRoles Role { get; private set; }
 
-        public User(string email, string password, string firstName, string lastName, int? yearOfStudy,
-                    string? learningCycle, string? faculty, string? specialization, string? group)
+        public User(
+            string email,
+            string password,
+            string firstName,
+            string lastName,
+            int? yearOfStudy,
+            string? learningCycle,
+            string? faculty,
+            string? specialization,
+            string? group,
+            UserRoles role = UserRoles.Student
+        )
         {
             Email = email;
             Password = password;
@@ -35,6 +46,7 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
             Faculty = faculty;
             Specialization = specialization;
             Group = group;
+            Role = role;
         }
 
         public void UpdateEmail(string email) => Email = email;
@@ -46,5 +58,7 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
         public void UpdateLastName(string lastName) => LastName = lastName;
 
         public void UpdateYearOfStudy(int? yearOfStudy) => YearOfStudy = yearOfStudy;
+
+        public void UpdateRole(UserRoles role) => Role = role;
     }
 }

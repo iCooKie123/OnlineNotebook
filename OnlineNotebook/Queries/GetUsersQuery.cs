@@ -1,11 +1,11 @@
 using MediatR;
+using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
 using OnlineNotebook.Services.Abstractions;
 
 namespace OnlineNotebook.Queries;
 
 public class GetUsersQuery : IRequest<IEnumerable<UserDTO>>
-{
-}
+{ }
 
 public class UserDTO
 {
@@ -18,6 +18,7 @@ public class UserDTO
     public string? Specialization { get; set; }
     public string? Group { get; set; }
     public int? YearOfStudy { get; set; }
+    public UserRoles Role { get; set; }
 }
 
 public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, IEnumerable<UserDTO>>
@@ -29,7 +30,10 @@ public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, IEnumerable<U
         _userService = userService;
     }
 
-    public async Task<IEnumerable<UserDTO>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<UserDTO>> Handle(
+        GetUsersQuery request,
+        CancellationToken cancellationToken
+    )
     {
         return await _userService.GetUsers();
     }

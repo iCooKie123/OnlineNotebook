@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OnlineNotebook.Controllers.Helpers;
 using OnlineNotebook.DatabaseConfigurations;
+using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
 using OnlineNotebook.Extensions;
 
 namespace OnlineNotebook
@@ -47,8 +48,7 @@ namespace OnlineNotebook
             builder.Services.AddDbContext<IDatabaseContext, DatabaseContext>(options =>
                 options.UseSqlServer(connectionString)
             );
-            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
-            Console.WriteLine(builder.Configuration["JwtSettings:Key"]);
+
             builder
                 .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -65,24 +65,27 @@ namespace OnlineNotebook
                         ClockSkew = TimeSpan.FromSeconds(5),
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])
-                        )
+                        ),
                     };
                 });
 
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    PolicyName.RequireAdminRole,
+                    policy => policy.RequireRole(UserRoles.Admin.ToString())
+                );
+                options.AddPolicy(
+                    PolicyName.RequireAnyRole,
+                    policy => policy.RequireAuthenticatedUser()
+                );
+                options.AddPolicy(
+                    PolicyName.RequireStudentRole,
+                    policy => policy.RequireRole(UserRoles.Student.ToString())
+                );
+            });
+
             var app = builder.Build();
-
-            //TODO:migration
-            //if (!builder.Environment.IsProduction())
-            //{
-            //    using (var scope = app.Services.CreateScope())
-            //    {
-            //        var services = scope.ServiceProvider;
-
-            //        var context = services.GetRequiredService<DatabaseContext>();
-
-            //        context.Database.Migrate();
-            //    }
-            //}
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -92,12 +95,6 @@ namespace OnlineNotebook
             }
 
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            //.AllowCredentials());
-            //builder.WithOrigins(
-            //[
-            //    "http://localhost:5173"
-            //])
-            //builder
 
             app.UseExceptionHandlingMiddleware();
 
