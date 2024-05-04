@@ -27,8 +27,8 @@ namespace OnlineNotebook.Queries
 
     internal class GetStudentClassesQueryHandler : IRequestHandler<GetStudentClassesQuery, IEnumerable<GetStudentClassesQueryResponse>>
     {
-        private IMapper _mapper;
-        private IDatabaseContext _context;
+        private readonly IMapper _mapper;
+        private readonly IDatabaseContext _context;
 
         public GetStudentClassesQueryHandler(IMapper mapper, IDatabaseContext context)
         {
@@ -38,14 +38,14 @@ namespace OnlineNotebook.Queries
 
         public async Task<IEnumerable<GetStudentClassesQueryResponse>> Handle(GetStudentClassesQuery request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.StudentId) ??
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.StudentId, cancellationToken: cancellationToken) ??
                 throw new NotFoundException($"User with id ${request.StudentId} was not found");
 
             var studentClasses = await _context.StudentClases
                 .Include(s => s.Student)
                 .Include(s => s.Class)
                 .Where(s => s.Student.Id == request.StudentId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken: cancellationToken);
 
             return _mapper.Map<IEnumerable<GetStudentClassesQueryResponse>>(studentClasses);
         }

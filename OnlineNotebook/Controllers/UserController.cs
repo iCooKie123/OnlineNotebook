@@ -32,7 +32,7 @@ namespace OnlineNotebook.Controllers
         }
 
         [Authorize(Policy=PolicyName.RequireAdminRole)]
-        [HttpGet(Name = nameof(GetUsers))]
+        [HttpGet("all",Name = nameof(GetUsers))]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers() =>
             Ok(await _mediator.Send(new GetUsersQuery()));
 

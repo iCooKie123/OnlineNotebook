@@ -1,5 +1,5 @@
-﻿using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
 
 namespace OnlineNotebook.DatabaseConfigurations.Entities
 {
@@ -20,8 +20,6 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
         [Required]
         public string Name { get; set; }
 
-        public StudyClass()
-        {
-        }
+        public StudyClass() { }
     }
 }

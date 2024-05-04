@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineNotebook.Controllers.CustomExceptions;
+using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
 using OnlineNotebook.Queries;
 
 namespace OnlineNotebook.Controllers
@@ -13,7 +14,7 @@ namespace OnlineNotebook.Controllers
     {
         public const string Route = "classes";
         private readonly IMediator _mediator;
-        private JsonSerializerOptions _options;
+        private readonly JsonSerializerOptions _options;
 
         public ClassesController(IMediator mediator)
         {
@@ -25,7 +26,7 @@ namespace OnlineNotebook.Controllers
             };
         }
 
-        [Authorize]
+        [Authorize(Policy = PolicyName.RequireStudentRole)]
         [HttpGet("all", Name = nameof(GetAllStudentClasses))]
         public async Task<
             ActionResult<IEnumerable<GetStudentClassesQueryResponse>>
@@ -40,6 +41,15 @@ namespace OnlineNotebook.Controllers
             var userId = userDeserialized.Id;
 
             return Ok(await _mediator.Send(new GetStudentClassesQuery().WithStudentId(userId)));
+        }
+
+        [Authorize(Policy = PolicyName.RequireAdminRole)]
+        [HttpGet("{studentId}", Name = nameof(GettAllStudentClassesForStudent))]
+        public async Task<
+            ActionResult<IEnumerable<GetStudentClassesQueryResponse>>
+        > GettAllStudentClassesForStudent(int studentId)
+        {
+            return Ok(await _mediator.Send(new GetStudentClassesQuery().WithStudentId(studentId)));
         }
     }
 }

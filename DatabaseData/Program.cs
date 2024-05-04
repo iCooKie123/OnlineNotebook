@@ -64,6 +64,7 @@ namespace DatabaseData
                     )
                     {
                         },
+                    new("admin@admin.upb", "admin", "Admin", "Adminulescu") { },
                 };
 
                 var classes = new List<StudyClass>

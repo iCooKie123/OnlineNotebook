@@ -22,8 +22,21 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
         public string? Faculty { get; private set; }
         public string? Specialization { get; private set; }
         public string? Group { get; private set; }
+
+        [Required]
         public UserRoles Role { get; private set; }
 
+        // Admin
+        public User(string email, string password, string firstName, string lastName)
+        {
+            Email = email;
+            Password = password;
+            FirstName = firstName;
+            LastName = lastName;
+            Role = UserRoles.Admin;
+        }
+
+        //Student
         public User(
             string email,
             string password,
@@ -58,7 +71,5 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
         public void UpdateLastName(string lastName) => LastName = lastName;
 
         public void UpdateYearOfStudy(int? yearOfStudy) => YearOfStudy = yearOfStudy;
-
-        public void UpdateRole(UserRoles role) => Role = role;
     }
 }

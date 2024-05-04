@@ -19,19 +19,17 @@ public class UpdateUserPasswordCommand : IRequest<string>
 public class UpdateUserPasswordHandler : IRequestHandler<UpdateUserPasswordCommand, string>
 {
     private readonly IUserService _userService;
-    private readonly IConfiguration _configuration;
 
-    public UpdateUserPasswordHandler(IUserService userService, IConfiguration configuration)
+    public UpdateUserPasswordHandler(IUserService userService)
     {
         _userService = userService;
-        _configuration = configuration;
     }
 
     public async Task<string> Handle(
         UpdateUserPasswordCommand request,
         CancellationToken cancellationToken
     ) =>
-         await _userService.UpdateUserPassword(
+        await _userService.UpdateUserPassword(
             request.OldPassword,
             request.NewPassword,
             request._userId
