@@ -4,8 +4,23 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
 {
     public class StudentClass : Entity
     {
-        public User Student { get; set; }
-        public StudyClass Class { get; set; }
-        public int? Grade { get; set; }
+        public User Student { get; private set; }
+        public StudyClass Class { get; private set; }
+        public int? Grade { get; private set; }
+
+        public StudentClass() { }
+
+        public StudentClass(User student, StudyClass @class, int? grade)
+        {
+            Student = student;
+            Class = @class;
+            Grade = grade;
+        }
+
+        public void UpdateGrade(int? grade) => Grade = grade;
+
+        public void UpdateClass(StudyClass @class) => Class = @class;
+
+        public void UpdateStudent(User student) => Student = student;
     }
 }

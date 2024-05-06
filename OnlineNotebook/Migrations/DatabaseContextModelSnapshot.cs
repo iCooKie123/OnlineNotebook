@@ -45,7 +45,7 @@ namespace OnlineNotebook.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentClases");
+                    b.ToTable("StudentClases", (string)null);
                 });
 
             modelBuilder.Entity("OnlineNotebook.DatabaseConfigurations.Entities.StudyClass", b =>
@@ -74,7 +74,7 @@ namespace OnlineNotebook.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Classes");
+                    b.ToTable("Classes", (string)null);
                 });
 
             modelBuilder.Entity("OnlineNotebook.DatabaseConfigurations.Entities.User", b =>
@@ -121,7 +121,7 @@ namespace OnlineNotebook.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("OnlineNotebook.DatabaseConfigurations.Entities.StudentClass", b =>

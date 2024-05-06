@@ -3,8 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineNotebook.Controllers.CustomExceptions;
+using OnlineNotebook.DatabaseConfigurations.Entities;
 using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
 using OnlineNotebook.Queries;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace OnlineNotebook.Controllers
 {
@@ -27,7 +29,7 @@ namespace OnlineNotebook.Controllers
         }
 
         [Authorize(Policy = PolicyName.RequireStudentRole)]
-        [HttpGet("all", Name = nameof(GetAllStudentClasses))]
+        [HttpGet(Name = nameof(GetAllStudentClasses))]
         public async Task<
             ActionResult<IEnumerable<GetStudentClassesQueryResponse>>
         > GetAllStudentClasses()
@@ -51,5 +53,11 @@ namespace OnlineNotebook.Controllers
         {
             return Ok(await _mediator.Send(new GetStudentClassesQuery().WithStudentId(studentId)));
         }
+
+        [Authorize(Policy = PolicyName.RequireAdminRole)]
+        [HttpGet("all-classes", Name = nameof(GetAllStudyClasses))]
+        public async Task<
+            ActionResult<IEnumerable<IEnumerable<StudyClass>>>
+        > GetAllStudyClasses() => Ok(await _mediator.Send(new GetAllClassesQuery()));
     }
 }

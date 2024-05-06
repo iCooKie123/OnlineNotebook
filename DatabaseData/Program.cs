@@ -182,14 +182,7 @@ namespace DatabaseData
                     {
                         int? grade = GetRandomGrade();
                         Console.WriteLine(grade);
-                        studentClasses.Add(
-                            new StudentClass
-                            {
-                                Student = user,
-                                Class = classes[j],
-                                Grade = grade
-                            }
-                        );
+                        studentClasses.Add(new StudentClass(user, classes[j], grade) { });
                     }
                 }
 
