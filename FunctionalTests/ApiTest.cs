@@ -1,21 +1,18 @@
-﻿using AutoMapper;
+﻿using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using OnlineNotebook;
 using OnlineNotebook.Controllers;
 using OnlineNotebook.DatabaseConfigurations;
 using OnlineNotebook.DatabaseConfigurations.Entities;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Net.Http.Json;
-using System.Security.Claims;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace FunctionalTests.Abstractions;
 
-public abstract class ApiTests<TApiTestFixture, TContextService, TContextImplementation, TProgram> : IDisposable
+public abstract class ApiTests<TApiTestFixture, TContextService, TContextImplementation, TProgram>
+    : IDisposable
     where TApiTestFixture : ApiTestFixture<TContextService, TContextImplementation, TProgram>
     where TContextImplementation : DatabaseContext, TContextService
     where TContextService : class, IDatabaseContext
@@ -31,9 +28,7 @@ public abstract class ApiTests<TApiTestFixture, TContextService, TContextImpleme
 
         Context.Database.EnsureCreated();
 
-        Factory.HttpContextAccessorMock
-            .SetupGet(m => m.HttpContext)
-            .Returns(HttpContext);
+        Factory.HttpContextAccessorMock.SetupGet(m => m.HttpContext).Returns(HttpContext);
     }
 
     public HttpClient Client { get; }
@@ -57,7 +52,8 @@ public abstract class ApiTest : ApiTests<ApiTestFixture, IDatabaseContext, Datab
 
     public JsonSerializerOptions DefaultOptions { get; }
 
-    protected ApiTest(ApiTestFixture factory) : base(factory)
+    protected ApiTest(ApiTestFixture factory)
+        : base(factory)
     {
         Mapper = Services.GetRequiredService<IMapper>();
 
@@ -71,17 +67,12 @@ public abstract class ApiTest : ApiTests<ApiTestFixture, IDatabaseContext, Datab
     public async Task Authenticate()
     {
         var user = new User("test", "test", "test", "test", 1, null, null, null, null);
-        {
-        }
+        { }
 
         Context.Users.Add(user);
         Context.SaveChanges();
 
-        var request = new
-        {
-            user.Email,
-            user.Password
-        };
+        var request = new { user.Email, user.Password };
 
         var result = await Client.PutAsJsonAsync($"{UserController.Route}/login", request);
         var token = await result.Content.ReadAsStringAsync();
