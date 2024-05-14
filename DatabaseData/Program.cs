@@ -11,7 +11,7 @@ namespace DatabaseData
         {
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
             optionsBuilder.UseSqlServer(
-                "data source=LocalPC\\SQLEXPRESS;initial catalog=OnlineNotebook;TrustServerCertificate=true;trusted_connection=true"
+                "data source=localhost\\SQLEXPRESS;initial catalog=OnlineNotebook;TrustServerCertificate=true;trusted_connection=true"
             );
             using (var context = new DatabaseContext(optionsBuilder.Options))
             {
