@@ -32,6 +32,20 @@ namespace OnlineNotebook.Services
             return _mapper.Map<IEnumerable<StudentClass>>(studentClasses);
         }
 
+        public async Task<IEnumerable<StudentClass>> GetStudentClassesAsync(
+            int classId,
+            CancellationToken cancellationToken
+        )
+        {
+            var studentClasses = await _context
+                .StudentClases.Include(s => s.Student)
+                .Include(s => s.Class)
+                .Where(s => s.Class.Id == classId)
+                .ToListAsync(cancellationToken: cancellationToken);
+
+            return studentClasses;
+        }
+
         public async Task UpdateStudentClassGrade(
             int studentId,
             int classId,

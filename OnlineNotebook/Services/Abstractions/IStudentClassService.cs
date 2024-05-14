@@ -11,5 +11,9 @@ namespace OnlineNotebook.Services.Abstractions
             int? grade,
             CancellationToken cancellationToken
         );
+        Task<IEnumerable<StudentClass>> GetStudentClassesAsync(
+            int classId,
+            CancellationToken cancellationToken
+        );
     }
 }

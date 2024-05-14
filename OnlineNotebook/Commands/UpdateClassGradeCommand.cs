@@ -1,5 +1,4 @@
 using MediatR;
-using OnlineNotebook.DatabaseConfigurations;
 using OnlineNotebook.Services.Abstractions;
 
 namespace OnlineNotebook.Commands

@@ -15,14 +15,12 @@ namespace OnlineNotebook.Controllers
     public class UserController : ControllerBase
     {
         public const string Route = "users";
-        private readonly IUserService _userService;
         private readonly IMediator _mediator;
 
         private JsonSerializerOptions _options;
 
-        public UserController(IUserService userService, IMediator mediator)
+        public UserController(IMediator mediator)
         {
-            _userService = userService;
             _mediator = mediator;
 
             _options = new JsonSerializerOptions()
@@ -31,8 +29,8 @@ namespace OnlineNotebook.Controllers
             };
         }
 
-        [Authorize(Policy=PolicyName.RequireAdminRole)]
-        [HttpGet("all",Name = nameof(GetUsers))]
+        [Authorize(Policy = PolicyName.RequireAdminRole)]
+        [HttpGet("all", Name = nameof(GetUsers))]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers() =>
             Ok(await _mediator.Send(new GetUsersQuery()));
 
@@ -45,11 +43,15 @@ namespace OnlineNotebook.Controllers
         [HttpGet("validate-token", Name = nameof(ValidateToken))]
         public ActionResult ValidateToken() => Ok();
 
-        [Authorize(Policy=PolicyName.RequireStudentRole)]
+        [Authorize(Policy = PolicyName.RequireStudentRole)]
         [HttpPatch("change-password", Name = nameof(UpdateUserPasswordAsync))]
-        public async Task<ActionResult<string>> UpdateUserPasswordAsync([FromBody] UpdateUserPasswordCommand request)
+        public async Task<ActionResult<string>> UpdateUserPasswordAsync(
+            [FromBody] UpdateUserPasswordCommand request
+        )
         {
-            var userClaim = (User.FindFirst("User")?.Value) ?? throw new ForbiddenException("User claim was null");
+            var userClaim =
+                (User.FindFirst("User")?.Value)
+                ?? throw new ForbiddenException("User claim was null");
             var userDeserialized = JsonSerializer.Deserialize<UserDTO>(userClaim, _options);
             var userId = userDeserialized.Id;
 

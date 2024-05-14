@@ -6,7 +6,6 @@ using OnlineNotebook.Controllers.CustomExceptions;
 using OnlineNotebook.DatabaseConfigurations.Entities;
 using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
 using OnlineNotebook.Queries;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace OnlineNotebook.Controllers
 {
@@ -59,5 +58,12 @@ namespace OnlineNotebook.Controllers
         public async Task<
             ActionResult<IEnumerable<IEnumerable<StudyClass>>>
         > GetAllStudyClasses() => Ok(await _mediator.Send(new GetAllClassesQuery()));
+
+        [Authorize(Policy = PolicyName.RequireAdminRole)]
+        [HttpGet("{classId}", Name = nameof(GetStudentClassById))]
+        public async Task<
+            ActionResult<IEnumerable<GetStudentClassQueryResponse>>
+        > GetStudentClassById(int classId) =>
+            Ok(await _mediator.Send(new GetStudentClassQuery().WithClassId(classId)));
     }
 }
