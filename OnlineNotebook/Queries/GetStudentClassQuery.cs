@@ -5,7 +5,7 @@ using OnlineNotebook.Services.Abstractions;
 
 namespace OnlineNotebook.Queries
 {
-    public class GetStudentClassQuery : IRequest<IEnumerable<GetStudentClassQueryResponse>>
+    public class GetStudentClassQuery : IRequest<IEnumerable<StudentClass>>
     {
         public int ClassId { get; private set; }
 
@@ -16,15 +16,8 @@ namespace OnlineNotebook.Queries
         }
     }
 
-    public class GetStudentClassQueryResponse
-    {
-        public int Grade { get; set; }
-        public User Student { get; set; }
-        public int ClassId { get; set; }
-    }
-
     public class GetStudentClassHandler
-        : IRequestHandler<GetStudentClassQuery, IEnumerable<GetStudentClassQueryResponse>>
+        : IRequestHandler<GetStudentClassQuery, IEnumerable<StudentClass>>
     {
         private readonly IStudentClassService _studentClassService;
         private readonly IMapper _mapper;
@@ -35,17 +28,9 @@ namespace OnlineNotebook.Queries
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetStudentClassQueryResponse>> Handle(
+        public async Task<IEnumerable<StudentClass>> Handle(
             GetStudentClassQuery request,
             CancellationToken cancellationToken
-        )
-        {
-            var studentClasses = await _studentClassService.GetStudentClassesAsync(
-                request.ClassId,
-                cancellationToken
-            );
-
-            return _mapper.Map<IEnumerable<GetStudentClassQueryResponse>>(studentClasses);
-        }
+        ) => await _studentClassService.GetStudentClassesAsync(request.ClassId, cancellationToken);
     }
 }

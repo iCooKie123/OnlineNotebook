@@ -45,7 +45,7 @@ namespace OnlineNotebook.Controllers
         }
 
         [Authorize(Policy = PolicyName.RequireAdminRole)]
-        [HttpGet("{studentId}", Name = nameof(GettAllStudentClassesForStudent))]
+        [HttpGet("student/{studentId}", Name = nameof(GettAllStudentClassesForStudent))]
         public async Task<
             ActionResult<IEnumerable<GetStudentClassesQueryResponse>>
         > GettAllStudentClassesForStudent(int studentId)
@@ -60,10 +60,9 @@ namespace OnlineNotebook.Controllers
         > GetAllStudyClasses() => Ok(await _mediator.Send(new GetAllClassesQuery()));
 
         [Authorize(Policy = PolicyName.RequireAdminRole)]
-        [HttpGet("{classId}", Name = nameof(GetStudentClassById))]
-        public async Task<
-            ActionResult<IEnumerable<GetStudentClassQueryResponse>>
-        > GetStudentClassById(int classId) =>
-            Ok(await _mediator.Send(new GetStudentClassQuery().WithClassId(classId)));
+        [HttpGet("class/{classId}", Name = nameof(GetStudentClassById))]
+        public async Task<ActionResult<IEnumerable<StudentClass>>> GetStudentClassById(
+            int classId
+        ) => Ok(await _mediator.Send(new GetStudentClassQuery().WithClassId(classId)));
     }
 }
