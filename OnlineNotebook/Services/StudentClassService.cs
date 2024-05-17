@@ -53,21 +53,19 @@ namespace OnlineNotebook.Services
             CancellationToken c
         )
         {
-            var studentClasses = await _context
-                .StudentClases.Include(sc => sc.Student)
-                .Include(sc => sc.Class)
-                .ToListAsync(cancellationToken: c);
-
             var studentClass =
-                studentClasses.FirstOrDefault(sc =>
-                    sc.Student.Id == studentId && sc.Class.Id == classId
-                )
+                await _context
+                    .StudentClases.Include(sc => sc.Student)
+                    .Include(sc => sc.Class)
+                    .FirstOrDefaultAsync(
+                        sc => sc.Student.Id == studentId && sc.Class.Id == classId,
+                        cancellationToken: c
+                    )
                 ?? throw new NotFoundException(
-                    $"Class with id {classId} and student id {studentId} was not found"
+                    $"Student with id {studentId} and class with id {classId} was not found"
                 );
 
             studentClass.UpdateGrade(grade);
-            await _context.SaveChangesAsync(c);
         }
     }
 }

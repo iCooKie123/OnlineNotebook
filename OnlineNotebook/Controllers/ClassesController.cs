@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineNotebook.Commands;
 using OnlineNotebook.Controllers.CustomExceptions;
 using OnlineNotebook.DatabaseConfigurations.Entities;
 using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
@@ -64,5 +65,16 @@ namespace OnlineNotebook.Controllers
         public async Task<ActionResult<IEnumerable<StudentClass>>> GetStudentClassById(
             int classId
         ) => Ok(await _mediator.Send(new GetStudentClassQuery().WithClassId(classId)));
+
+        [Authorize(Policy = PolicyName.RequireAdminRole)]
+        [HttpPatch("{classId}/grades", Name = nameof(UpdateClassGrades))]
+        public async Task<ActionResult> UpdateClassGrades(
+            int classId,
+            [FromBody] UpdateClassGradeCommand command
+        )
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
     }
 }
