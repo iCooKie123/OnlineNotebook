@@ -9,6 +9,7 @@ namespace OnlineNotebook.Extensions
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IStudentClassService, StudentClassService>();
+            services.AddMemoryCache();
         }
     }
 }

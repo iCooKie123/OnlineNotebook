@@ -8,5 +8,6 @@ namespace OnlineNotebook.DatabaseConfigurations
         public DbSet<User> Users { get; set; }
         public DbSet<StudyClass> Classes { get; set; }
         public DbSet<StudentClass> StudentClases { get; set; }
+        public DbSet<News> News { get; set; }
     }
 }
