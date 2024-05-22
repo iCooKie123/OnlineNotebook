@@ -20,5 +20,8 @@ namespace OnlineNotebook.Controllers
         [HttpGet(Name = nameof(GetAllNews))]
         public async Task<ActionResult<IEnumerable<News>>> GetAllNews() =>
             Ok(await _mediator.Send(new GetAllNewsQuery()));
+
+        //TODO: Add edit endopoint and delete endpoint(both for admin)
+        //TODO: Clear cache on edit /delete
     }
 }
