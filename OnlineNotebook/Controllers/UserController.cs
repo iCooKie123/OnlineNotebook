@@ -6,7 +6,6 @@ using OnlineNotebook.Commands;
 using OnlineNotebook.Controllers.CustomExceptions;
 using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
 using OnlineNotebook.Queries;
-using OnlineNotebook.Services.Abstractions;
 
 namespace OnlineNotebook.Controllers
 {
@@ -53,7 +52,7 @@ namespace OnlineNotebook.Controllers
                 (User.FindFirst("User")?.Value)
                 ?? throw new ForbiddenException("User claim was null");
             var userDeserialized = JsonSerializer.Deserialize<UserDTO>(userClaim, _options);
-            var userId = userDeserialized.Id;
+            var userId = userDeserialized!.Id;
 
             return Ok(await _mediator.Send(request.WithId(userId)));
         }

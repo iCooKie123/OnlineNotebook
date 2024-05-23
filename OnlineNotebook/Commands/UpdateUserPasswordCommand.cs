@@ -5,8 +5,8 @@ namespace OnlineNotebook.Commands;
 
 public class UpdateUserPasswordCommand : IRequest<string>
 {
-    public string OldPassword { get; set; }
-    public string NewPassword { get; set; }
+    public required string OldPassword { get; set; }
+    public required string NewPassword { get; set; }
     public int? _userId;
 
     public UpdateUserPasswordCommand WithId(int userId)

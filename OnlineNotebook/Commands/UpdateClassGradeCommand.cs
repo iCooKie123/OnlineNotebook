@@ -6,7 +6,7 @@ namespace OnlineNotebook.Commands
 {
     public class UpdateClassGradeCommand : IRequest
     {
-        public IEnumerable<UpdateSingleStudentGradeRequest> StudentGrades { get; set; }
+        public required IEnumerable<UpdateSingleStudentGradeRequest> StudentGrades { get; set; }
         public int ClassId { get; set; }
     }
 

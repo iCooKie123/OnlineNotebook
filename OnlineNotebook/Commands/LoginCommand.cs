@@ -1,12 +1,12 @@
-﻿using AutoMapper;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
+using AutoMapper;
 using MediatR;
 using Microsoft.IdentityModel.Tokens;
 using OnlineNotebook.Controllers.CustomExceptions;
 using OnlineNotebook.Services.Abstractions;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Json;
 
 namespace OnlineNotebook.Commands
 {
@@ -23,7 +23,11 @@ namespace OnlineNotebook.Commands
         public IMapper _mapper { get; set; }
         private JsonSerializerOptions Options { get; set; }
 
-        public LoginCommandHandler(IUserService userService, IConfiguration configuration, IMapper mapper)
+        public LoginCommandHandler(
+            IUserService userService,
+            IConfiguration configuration,
+            IMapper mapper
+        )
         {
             _userService = userService;
             _configuration = configuration;
@@ -46,19 +50,24 @@ namespace OnlineNotebook.Commands
 
             var claims = new[]
             {
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("User", JsonSerializer.Serialize(user, Options)),
-                        new Claim(ClaimTypes.Role, user.Role.ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                new Claim("User", JsonSerializer.Serialize(user, Options)),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 
-            var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]);
-            var expiryMinutes = DateTime.UtcNow.AddMinutes(int.Parse(_configuration["JwtSettings:ExpirationHours"]) * 60);
+            var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]!);
+            var expiryMinutes = DateTime.UtcNow.AddMinutes(
+                int.Parse(_configuration["JwtSettings:ExpirationHours"]!) * 60
+            );
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = expiryMinutes,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature
+                ),
                 Issuer = _configuration["JwtSettings:Issuer"],
                 Audience = _configuration["JwtSettings:Audience"]
             };

@@ -64,7 +64,7 @@ namespace OnlineNotebook
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.FromSeconds(5),
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"])
+                            Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]!)
                         ),
                     };
                 });

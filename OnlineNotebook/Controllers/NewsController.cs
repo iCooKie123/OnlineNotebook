@@ -24,20 +24,17 @@ namespace OnlineNotebook.Controllers
         public async Task<ActionResult<IEnumerable<News>>> GetAllNews() =>
             Ok(await _mediator.Send(new GetAllNewsQuery()));
 
-        //TODO: Add edit endopoint and delete endpoint(both for admin)
-        //TODO: Clear cache on edit /delete
-        //
-        // [HttpPatch("/edit", Name = nameof(EditNewsOrAddNews))]
-        // [Authorize(Policy = PolicyName.RequireAdminRole)]
-        // public async Task<ActionResult> EditNewsOrAddNews(
-        //     [FromBody] EditOrAddNewsCommand command)
-        // ) {
-        //     return Ok(await _mediator.Send(command));
-
-
         [HttpPatch("edit", Name = nameof(EditNewsOrAddNews))]
         [Authorize(Policy = PolicyName.RequireAdminRole)]
-        public async Task<ActionResult> EditNewsOrAddNews([FromBody] EditOrAddNewsCommand command)
+        public async Task<ActionResult> EditNewsOrAddNews([FromBody] EditNewsCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpPost("add", Name = nameof(AddNews))]
+        [Authorize(Policy = PolicyName.RequireAdminRole)]
+        public async Task<ActionResult> AddNews([FromBody] AddNewsCommand command)
         {
             await _mediator.Send(command);
             return Ok();
