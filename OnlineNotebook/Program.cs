@@ -45,10 +45,10 @@ namespace OnlineNotebook
             builder.Services.AddCustomServices();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            if (builder.Environment.Equals("Development"))
-                builder.Services.AddDbContext<IDatabaseContext, DatabaseContext>(options =>
-                    options.UseSqlServer(connectionString)
-                );
+
+            builder.Services.AddDbContext<IDatabaseContext, DatabaseContext>(options =>
+                options.UseSqlServer(connectionString)
+            );
 
             builder
                 .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -91,7 +91,10 @@ namespace OnlineNotebook
             // Configure the HTTP request pipeline.
 
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
