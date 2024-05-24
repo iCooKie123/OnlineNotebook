@@ -1,0 +1,21 @@
+name: Testing pipeline
+on:
+  workflow_dispatch:
+
+env:
+  SOMETHING: SOMETHING
+jobs:
+  first-job:
+    runs-on: windows-latest
+    outputs:
+      test: ${{steps.first-job.outputs.test}}
+    steps:
+      - name: first step
+        id: first-job
+        run: echo "test=hello" >> $GITHUB_OUTPUT
+  second-job:
+    runs-on: windows-latest
+    needs: first-job
+    steps:
+      - name: second step
+        run: echo ${{needs.first-job.outputs.test}}

@@ -1,8 +1,7 @@
 name: Build and deploy .NET Core application to Web App OnlineNotebook20240523183558 with API Management Service OnlineNotebookapi-OnlineNotebook
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
+
 env:
   AZURE_WEBAPP_NAME: OnlineNotebook20240523183558
   AZURE_WEBAPP_PACKAGE_PATH: OnlineNotebook\publish
@@ -68,8 +67,6 @@ jobs:
            if ($line -match '->') {
              $publishPath = $line.Split('>')[1].Trim()
              Write-Output "::set-output name=publish_output::$publishPath"
-             $swaggerJsonPath = Join-Path $publishPath swagger.json
-             echo "swaggerPath=$swaggerJsonPath" >> $GITHUB_OUTPUT
              break
            }
              }
