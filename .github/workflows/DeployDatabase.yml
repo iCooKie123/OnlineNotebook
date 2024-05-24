@@ -11,6 +11,7 @@ env:
   AZURE_SQL_SERVER_NAME: onlinenotebook-database
 jobs:
   run:
+    if: ${{ !github.event.act }}
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4

@@ -4,11 +4,12 @@ on:
 
 env:
   SOMETHING: SOMETHING
+
 jobs:
   first-job:
     runs-on: windows-latest
     outputs:
-      test_output: ${{steps.first-job.outputs.TEST}}
+      test_output: ${{ steps.first-job.outputs.TEST }}
     steps:
       - name: first step
         id: first-job
@@ -20,4 +21,4 @@ jobs:
     needs: first-job
     steps:
       - name: second step
-        run: echo ${{needs.first-job.outputs.test}}
+        run: echo ${{ needs.first-job.outputs.test_output }}
