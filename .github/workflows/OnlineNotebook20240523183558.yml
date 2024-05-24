@@ -36,10 +36,10 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.SWASHBUCKLE_DOTNET_CORE_VERSION }}
-     - name: Replace values in JSON file
-       uses: tnikFi/json-file-transform@v1
-       with:
-         files: '**/appsettings.json'
+      - name: Replace values in JSON file
+        uses: tnikFi/json-file-transform@v1
+        with:
+          files: '**/appsettings.json'
           key-value-pairs: |
             ConnectionStrings.DefaultConnection=${{  secrets.DatabaseConnectionString }}
       - name: Restore
