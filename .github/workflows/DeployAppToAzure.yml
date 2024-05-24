@@ -102,6 +102,10 @@ jobs:
     runs-on: windows-latest
     needs: build
     steps:
+      - name: Check dir command
+        shell: pwsh
+        run: |
+          dir -r swagger.json
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
