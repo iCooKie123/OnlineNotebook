@@ -36,11 +36,12 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ env.SWASHBUCKLE_DOTNET_CORE_VERSION }}
-      - name: Substitute App Settings variable
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: "${{ env.WORKING_DIRECTORY }}/appsettings.json"
-        env: ConnectionStrings.DefaultConnection=${{ secrets.DatabaseConnectionString }}
+     - name: Replace values in JSON file
+       uses: tnikFi/json-file-transform@v1
+       with:
+         files: '**/appsettings.json'
+          key-value-pairs: |
+            ConnectionStrings.DefaultConnection=${{  secrets.DatabaseConnectionString }}
       - name: Restore
         run: dotnet restore ${{ env.WORKING_DIRECTORY }}
       - name: Build
