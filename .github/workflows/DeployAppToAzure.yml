@@ -21,6 +21,7 @@ env:
   WORKING_DIRECTORY: OnlineNotebook
 jobs:
   build:
+    if: ${{ !github.event.act }}
     runs-on: windows-latest
     outputs:
       swagger-path: ${{steps.create_swagger_json.outputs.SWAGGER_JSON_PATH}}
@@ -96,6 +97,7 @@ jobs:
           name: webapp
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
   deploy:
+    if: ${{ !github.event.act }}
     runs-on: windows-latest
     needs: build
     steps:
