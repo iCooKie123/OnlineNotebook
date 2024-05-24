@@ -70,8 +70,7 @@ jobs:
         shell: pwsh
         run: 
             $swaggerPath = ${{ steps.publish.outputs.publish_output }}/swagger.json
-            if (-Not (Test-Path )) {
-              New-Item -ItemType Directory -Path $specPath -Force
+            if (-Not (Test-Path $swaggerPath)) {
               New-Item -ItemType File -Path $swaggerPath -Force
             }
       - name: Install Swashbuckle CLI .NET Global Tool
