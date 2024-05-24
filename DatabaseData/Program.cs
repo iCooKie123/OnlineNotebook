@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using OnlineNotebook.DatabaseConfigurations;
 using OnlineNotebook.DatabaseConfigurations.Entities;
 using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
@@ -10,6 +12,7 @@ namespace DatabaseData
     {
         private static void Main(string[] args)
         {
+            var builder = WebApplication.CreateBuilder(args);
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
             string connectionString = ConfigurationHelper.GetConfigValue(
                 "OnlineNotebook\\OnlineNotebook",
@@ -18,8 +21,10 @@ namespace DatabaseData
 
             optionsBuilder.UseSqlServer(connectionString);
             using var context = new DatabaseContext(optionsBuilder.Options);
-            context.Database.EnsureDeleted();
-            // Apply migrations
+
+            if (builder.Environment.IsDevelopment())
+                context.Database.EnsureDeleted();
+
             context.Database.Migrate();
 
             // Insert data

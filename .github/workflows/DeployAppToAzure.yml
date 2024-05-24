@@ -20,7 +20,6 @@ env:
   WORKING_DIRECTORY: OnlineNotebook
 jobs:
   build:
-    if: ${{ !github.event.act }}
     runs-on: windows-latest
     outputs:
       swagger-path: ${{steps.create_swagger_json.outputs.SWAGGER_JSON_PATH}}
@@ -90,8 +89,9 @@ jobs:
           $swaggerOutput = swagger tofile --output "${{ steps.publish.output.publish_output }}swagger.json" ${{ steps.build.outputs.build_output }} "${{ env.API_IMPORT_VERSION }}"
           $swaggerOutputLines = $swaggerOutput -split '\s+' | Select-Object -Last 1
           echo $swaggerOutputLines
-          echo "SWAGGER_JSON_PATH=$swaggerOutputLines" >> $GITHUB_ENV
+          echo "::set-output name=SWAGGER_JSON_PATH::$swaggerOutputLines"
         working-directory: ${{ env.WORKING_DIRECTORY }}
+
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
         with:
