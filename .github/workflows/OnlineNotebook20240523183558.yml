@@ -11,7 +11,7 @@ env:
   AZURE_APIM_SERVICENAME: OnlineNotebookapi
   AZURE_APIM_API_ID: OnlineNotebook
   AZURE_APIM_APPSERVICEURL: https://onlinenotebook20240523183558.azurewebsites.net
-  SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 5.6.3
+  SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.6.2 #latest stable release at the time
   SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
   API_IMPORT_SPECIFICATION_PATH: OnlineNotebook\publish\swagger.json
   API_IMPORT_DLL: OnlineNotebook\bin\Release\net8.0\OnlineNotebook.dll
@@ -44,7 +44,20 @@ jobs:
       - name: Restore
         run: dotnet restore ${{ env.WORKING_DIRECTORY }}
       - name: Build
-        run: dotnet build ${{ env.WORKING_DIRECTORY }} --configuration ${{ env.CONFIGURATION }} --no-restore
+        id: build
+        shell: pwsh
+        run: |
+         $buildOutput = dotnet build $env:WORKING_DIRECTORY --configuration $env:CONFIGURATION --no-restore
+         $buildOutputLines = $buildOutput -split '\r?\n'
+         foreach ($line in $buildOutputLines) {
+          if ($line -match '->') {
+            $buildPath = $line.Split('>')[1].Trim()
+            Write-Output "::set-output name=build_output::$buildPath"
+            break
+          }
+         }
+      - name: Echo Build Output
+        run: echo ${{ steps.build.outputs.build_output }}
       - name: Test
         run: dotnet test ${{ env.WORKING_DIRECTORY }} --no-build
       - name: Publish
@@ -56,7 +69,7 @@ jobs:
         run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version ${{ env.SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION }}
         working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: Generate Open API Specification Document
-        run: swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" "${{ env.API_IMPORT_DLL }}" "${{ env.API_IMPORT_VERSION }}"
+        run: swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" ${{ steps.build.outputs.build_output }} "${{ env.API_IMPORT_VERSION }}"
         working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
