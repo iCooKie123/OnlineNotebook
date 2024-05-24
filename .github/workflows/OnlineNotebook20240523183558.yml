@@ -26,13 +26,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check github workspace
         run: echo ${{ github.workspace }}
-      - name: Check and Create Open API Specification Document Path
-        shell: pwsh
-        run: |
-          if (-Not (Test-Path ${{env.API_IMPORT_SPECIFICATION_PATH}})) {
-           New-Item -ItemType Directory -Path (Split-Path ${{env.API_IMPORT_SPECIFICATION_PATH}}) -Force
-           New-Item -ItemType File -Path ${{env.API_IMPORT_SPECIFICATION_PATH}} -Force
-            }
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
@@ -61,15 +54,32 @@ jobs:
       - name: Test
         run: dotnet test ${{ env.WORKING_DIRECTORY }} --no-build
       - name: Publish
-        run: dotnet publish ${{ env.WORKING_DIRECTORY }} --configuration ${{ env.CONFIGURATION }} --no-build --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-      - name: Check dir
-        run : dir
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+        id: publish
+        shell: pwsh
+        run: |
+         $publishOutput = dotnet publish $env:WORKING_DIRECTORY --configuration $env:CONFIGURATION --no-build --output $env:AZURE_WEBAPP_PACKAGE_PATH
+         $publishOutputLines = $publishOutput -split '\r?\n'
+         foreach ($line in $publishOutputLines) {
+          if ($line -match '->') {
+            $publishPath = $line.Split('>')[1].Trim()
+            Write-Output "::set-output name=publish_output::$publishPath"
+            break
+          }
+            }
+      - name: Check and Create Open API Specification Document Path
+        shell: pwsh
+        run: |
+            $specPath = ${{ steps.publish.outputs.publish_output }}
+            $swaggerPath = Join-Path $specPath "swagger.json"
+            if (-Not (Test-Path $swaggerPath)) {
+              New-Item -ItemType Directory -Path $specPath -Force
+              New-Item -ItemType File -Path $swaggerPath -Force
+            }
       - name: Install Swashbuckle CLI .NET Global Tool
         run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version ${{ env.SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION }}
         working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: Generate Open API Specification Document
-        run: swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" ${{ steps.build.outputs.build_output }} "${{ env.API_IMPORT_VERSION }}"
+        run: swagger tofile --output "${{ steps.publish.output.publish_output }}/swagger.json" ${{ steps.build.outputs.build_output }} "${{ env.API_IMPORT_VERSION }}"
         working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
