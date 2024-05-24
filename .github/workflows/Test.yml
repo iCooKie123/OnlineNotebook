@@ -12,7 +12,9 @@ jobs:
     steps:
       - name: first step
         id: first-job
-        run: echo "TEST=hello" >> $GITHUB_ENV
+        run: |
+          echo "Hello, World!"
+          echo "::set-output name=TEST::Hello, World!"
   second-job:
     runs-on: windows-latest
     needs: first-job
