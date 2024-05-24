@@ -23,7 +23,7 @@ jobs:
   build:
     runs-on: windows-latest
     outputs:
-      swagger-path: ${{steps.publish.outputs.swaggerPath}}
+      swagger-path: ${{steps.create_swagger_json.outputs.SWAGGER_JSON_PATH}}
     steps:
       - uses: actions/checkout@v4
       - name: Check github workspace
@@ -77,8 +77,15 @@ jobs:
            }
              }
       - name: Run DatabaseData Project (Optional)
-        if: contains(github.event.message, 'update-database') # Run only on commits with "update-database" keyword
-        run: dotnet run --project DatabaseData
+        # if: contains(github.event.message, 'update-database') # Run only on commits with "update-database" keyword
+        shell: pwsh
+        run: |
+          dotnet build DatabaseData
+          dotnet restore DatabaseData
+          dotnet run --project DatabaseData
+      - name: Check optional condition
+        if: contains(github.event.message, 'update-database')
+        run: echo "Database updated"
       - name: Check and Create Open API Specification Document Path
         shell: pwsh
         run: |
@@ -90,7 +97,13 @@ jobs:
         run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version ${{ env.SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION }}
         working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: Generate Open API Specification Document
-        run: swagger tofile --output "${{ steps.publish.output.publish_output }}swagger.json" ${{ steps.build.outputs.build_output }} "${{ env.API_IMPORT_VERSION }}"
+        id: create_swagger_json
+        shell: pwsh
+        run: |
+          swagger tofile --output "swagger.json" ${{ steps.build.outputs.build_output }} ${{ env.API_IMPORT_VERSION }}
+          $swaggerOutput = swagger tofile --output "swagger.json" ${{ steps.build.outputs.build_output }} ${{ env.API_IMPORT_VERSION }}
+          $swaggerPath = $swaggerOutput -match '(?<=written to ).*' | Select-String -ExpandProperty Matches | Select-Object -ExpandProperty Value | Substring ($swaggerOutput.IndexOf("written to ") + 12)
+          echo "SWAGGER_JSON_PATH=$swaggerPath" >> $GITHUB_OUTPUT
         working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
@@ -117,7 +130,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_SECRET }}
       - name: Import API into Azure API Management
-        run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path "D:\a\OnlineNotebook\OnlineNotebook\OnlineNotebook\swagger.json" --specification-format OpenApi --subscription-required false
+        run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path "${{needs.build.outputs.swagger-path}}" --specification-format OpenApi --subscription-required false
       - name: logout
         run: >
           az logout
