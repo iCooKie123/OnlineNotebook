@@ -78,10 +78,6 @@ jobs:
              }
       - name: Run DatabaseData Project (Optional)
         if: contains(github.event.message, 'update-database') # Run only on commits with "update-database" keyword
-        # Assuming DatabaseData project is in the same repository
-        uses: actions/checkout@v4 # Check out entire repository (adjust if needed)
-        with:
-          subdirectory: "DatabaseData" # Change to your project's subdirectory
         run: dotnet run --project DatabaseData
       - name: Check and Create Open API Specification Document Path
         shell: pwsh
