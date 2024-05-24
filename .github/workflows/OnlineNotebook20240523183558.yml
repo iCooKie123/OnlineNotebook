@@ -68,7 +68,7 @@ jobs:
             }
       - name: Check and Create Open API Specification Document Path
         shell: pwsh
-        run: 
+        run: |
             $swaggerPath = ${{ steps.publish.outputs.publish_output }}swagger.json
             if (-Not (Test-Path $swaggerPath)) {
               New-Item -ItemType File -Path $swaggerPath -Force
