@@ -26,8 +26,6 @@ jobs:
       swagger-path: ${{steps.create_swagger_json.outputs.SWAGGER_JSON_PATH}}
     steps:
       - uses: actions/checkout@v4
-      - name: Check github workspace
-        run: echo ${{ github.workspace }}
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
@@ -57,8 +55,6 @@ jobs:
              break
            }
           }
-      - name: Echo Build Output
-        run: echo ${{ steps.build.outputs.build_output }}
       - name: Test
         run: dotnet test ${{ env.WORKING_DIRECTORY }} --no-build
       - name: Publish
@@ -118,13 +114,6 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_SECRET }}
-      - name: Run DatabaseData Project (Optional)
-        # if: contains(github.event.message, 'update-database') # Run only on commits with "update-database" keyword
-        shell: pwsh
-        run: |
-          dotnet build DatabaseData
-          dotnet restore DatabaseData
-          dotnet run --project DatabaseData
       - name: Import API into Azure API Management
         run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path "${{needs.build.outputs.swagger-path}}" --specification-format OpenApi --subscription-required false
       - name: logout

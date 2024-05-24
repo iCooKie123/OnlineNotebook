@@ -1,0 +1,28 @@
+name: Run Database Deployment project
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      steps:
+        - uses: actions/checkout@v4
+        - name: Setup .NET SDK
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+        - name: Setup SwashBuckle .NET Core
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: ${{ env.SWASHBUCKLE_DOTNET_CORE_VERSION }}
+        - name: Replace values in JSON file
+          uses: tnikFi/json-file-transform@v1
+          with:
+            files: "**/appsettings.json"
+            key-value-pairs: |
+              ConnectionStrings.DefaultConnection=${{  secrets.DatabaseConnectionString }}
+        - name: Restore
+          run: dotnet restore ${{ env.WORKING_DIRECTORY }}
+        - name: Build
+          run: dotnet build --project DatabaseData --configuration Release
+        - name: Run Database Deployment project
+          run: dotnet run --project DatabaseData --configuration Release
