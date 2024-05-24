@@ -95,8 +95,13 @@ jobs:
       - name: Publish Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: webapp,swagger
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}, ${{ steps.create_swagger_json.outputs.SWAGGER_JSON_PATH }}
+          name: webapp
+          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      - name: Publish Swagger Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: swagger
+          path: ${{ steps.create_swagger_json.outputs.SWAGGER_JSON_PATH }}
   deploy:
     if: ${{ !github.event.act }}
     runs-on: windows-latest
