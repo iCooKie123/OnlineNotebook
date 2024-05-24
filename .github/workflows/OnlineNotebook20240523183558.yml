@@ -40,15 +40,15 @@ jobs:
         id: build
         shell: pwsh
         run: |
-         $buildOutput = dotnet build $env:WORKING_DIRECTORY --configuration $env:CONFIGURATION --no-restore
-         $buildOutputLines = $buildOutput -split '\r?\n'
-         foreach ($line in $buildOutputLines) {
-          if ($line -match '->') {
-            $buildPath = $line.Split('>')[1].Trim()
-            Write-Output "::set-output name=build_output::$buildPath"
-            break
+          $buildOutput = dotnet build $env:WORKING_DIRECTORY --configuration $env:CONFIGURATION --no-restore
+          $buildOutputLines = $buildOutput -split '\r?\n'
+          foreach ($line in $buildOutputLines) {
+           if ($line -match '->') {
+             $buildPath = $line.Split('>')[1].Trim()
+             Write-Output "::set-output name=build_output::$buildPath"
+             break
+           }
           }
-         }
       - name: Echo Build Output
         run: echo ${{ steps.build.outputs.build_output }}
       - name: Test
@@ -57,22 +57,22 @@ jobs:
         id: publish
         shell: pwsh
         run: |
-         $publishOutput = dotnet publish $env:WORKING_DIRECTORY --configuration $env:CONFIGURATION --no-build --output $env:AZURE_WEBAPP_PACKAGE_PATH
-         $publishOutputLines = $publishOutput -split '\r?\n'
-         foreach ($line in $publishOutputLines) {
-          if ($line -match '->') {
-            $publishPath = $line.Split('>')[1].Trim()
-            Write-Output "::set-output name=publish_output::$publishPath"
-            break
-          }
-            }
+          $publishOutput = dotnet publish $env:WORKING_DIRECTORY --configuration $env:CONFIGURATION --no-build --output $env:AZURE_WEBAPP_PACKAGE_PATH
+          $publishOutputLines = $publishOutput -split '\r?\n'
+          foreach ($line in $publishOutputLines) {
+           if ($line -match '->') {
+             $publishPath = $line.Split('>')[1].Trim()
+             Write-Output "::set-output name=publish_output::$publishPath"
+             break
+           }
+             }
       - name: Check and Create Open API Specification Document Path
         shell: pwsh
         run: |
-            $swaggerPath = ${{ steps.publish.outputs.publish_output }}swagger.json
-            if (-Not (Test-Path $swaggerPath)) {
-              New-Item -ItemType File -Path $swaggerPath -Force
-            }
+          $swaggerPath = "${{ steps.publish.outputs.publish_output }}swagger.json"
+          if (-Not (Test-Path $swaggerPath)) {
+            New-Item -ItemType File -Path $swaggerPath -Force
+          }
       - name: Install Swashbuckle CLI .NET Global Tool
         run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version ${{ env.SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION }}
         working-directory: ${{ env.WORKING_DIRECTORY }}
