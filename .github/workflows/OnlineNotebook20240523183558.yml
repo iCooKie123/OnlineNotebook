@@ -24,6 +24,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check github workspace
+        run: echo ${{ github.workspace }}
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v3
         with:
@@ -44,7 +46,7 @@ jobs:
         run: dotnet tool install --global Swashbuckle.AspNetCore.Cli --version ${{ env.SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION }}
         working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: Check and Create Open API Specification Document Path
-        run: .\check_and_create.ps1 -specPath "${{ env.API_IMPORT_SPECIFICATION_PATH }}"
+        run: ${{ github.workspace }}\check_and_create.ps1 -specPath "${{ env.API_IMPORT_SPECIFICATION_PATH }}"
         shell: pwsh
       - name: Generate Open API Specification Document
         run: swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" "${{ env.API_IMPORT_DLL }}" "${{ env.API_IMPORT_VERSION }}"
