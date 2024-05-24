@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using OnlineNotebook.DatabaseConfigurations;
 using OnlineNotebook.DatabaseConfigurations.Entities;
 using OnlineNotebook.DatabaseConfigurations.Entities.Abstractions;
@@ -10,9 +11,12 @@ namespace DatabaseData
         private static void Main(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
-            optionsBuilder.UseSqlServer(
-                "data source=localhost\\SQLEXPRESS;initial catalog=OnlineNotebook;TrustServerCertificate=true;trusted_connection=true"
+            string connectionString = ConfigurationHelper.GetConfigValue(
+                "OnlineNotebook\\OnlineNotebook",
+                "ConnectionStrings:DefaultConnection"
             );
+
+            optionsBuilder.UseSqlServer(connectionString);
             using var context = new DatabaseContext(optionsBuilder.Options);
             context.Database.EnsureDeleted();
             // Apply migrations
@@ -180,7 +184,6 @@ namespace DatabaseData
                 for (int j = 0; j < 4 * i; j++)
                 {
                     int? grade = GetRandomGrade();
-                    Console.WriteLine(grade);
                     studentClasses.Add(new StudentClass(user, classes[j], grade) { });
                 }
             }
@@ -202,6 +205,40 @@ namespace DatabaseData
             {
                 Random rand = new();
                 return rand.Next(2, 11); // Random grade between 2 and 10
+            }
+        }
+
+        public static class ConfigurationHelper
+        {
+            public static string GetConfigValue(string projectName, string key)
+            {
+                if (string.IsNullOrEmpty(projectName) || string.IsNullOrEmpty(key))
+                {
+                    throw new ArgumentNullException(nameof(projectName) + " or " + nameof(key));
+                }
+
+                var configuration = GetConfiguration(projectName);
+                return configuration?.GetValue<string>(key);
+            }
+
+            private static IConfiguration GetConfiguration(string projectName)
+            {
+                var solutionPath = Path.GetDirectoryName(Directory.GetCurrentDirectory());
+                var projectDirectory = Path.Combine(solutionPath, projectName);
+                var configPath = Path.Combine(projectDirectory, "appsettings.json");
+
+                if (!File.Exists(configPath))
+                {
+                    throw new FileNotFoundException(
+                        $"appsettings.json not found for project: {projectName}"
+                    );
+                }
+
+                var configurationBuilder = new ConfigurationBuilder()
+                    .SetBasePath(projectDirectory)
+                    .AddJsonFile(configPath);
+
+                return configurationBuilder.Build();
             }
         }
     }
