@@ -23,6 +23,7 @@ jobs:
     runs-on: windows-latest
     outputs:
       swagger-path: ${{steps.create_swagger_json.outputs.SWAGGER_JSON_PATH}}
+      swagger-file: ${{steps.open_swagger_file.outputs.SWAGGER_FILE}}
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET SDK
@@ -97,11 +98,11 @@ jobs:
         with:
           name: webapp
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-      - name: Publish Swagger Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: swagger
-          path: ${{ steps.create_swagger_json.outputs.SWAGGER_JSON_PATH }}
+      - name: Open the swagger file and put it into output
+        shell: pwsh
+        id: open_swagger_file
+        run: |
+          echo "::set-output name=SWAGGER_FILE=Get-Content ${{ steps.create_swagger_json.outputs.SWAGGER_JSON_PATH }} "
   deploy:
     if: ${{ !github.event.act }}
     runs-on: windows-latest
@@ -133,8 +134,13 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_SECRET }}
+      - name: Write to swagger file
+        id: writeSwaggerFile
+        run: |
+          Out-File -FilePath "/swagger.json" -InputObject ${{ needs.build.outputs.swagger-file }} -Encoding UTF8
+          echo "::set-output name=path::swagger.json"
       - name: Import API into Azure API Management
-        run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path swagger.json --specification-format OpenApi --subscription-required false
+        run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path ${{steps.writeSwaggerFile.output.path}} --specification-format OpenApi --subscription-required false
         working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: logout
         run: >

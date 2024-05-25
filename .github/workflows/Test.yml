@@ -13,31 +13,22 @@ jobs:
     outputs:
       test_output: ${{ steps.first-job.outputs.TEST }}
     steps:
-      - name: first step
+      - name: Write to a json file
         id: first-job
         run: |
-          echo "Hello, World!"
-          echo "::set-output name=TEST::Hello, World!"
-      - name: create a json file
-        run: echo "Hello, World!" > test.json
-      - name: upload to artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: test.json
-          path: test.json
-
+          echo "{
+            \"test\": \"test\"
+          }" > test.json
+          echo "::set-output name=TEST::test.json"
+     
   second-job:
     runs-on: windows-latest
     needs: first-job
     steps:
-      - name: second step
-        run: echo ${{ needs.first-job.outputs.test_output }}
-      - name: download from artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: test.json
-          path: test.json
-      - name: cat the file
-        run: cat test.json
-      - name: write to file
-        run: echo "Hello, World!" > test.json
+      - name: Read from a json file
+        run: |
+          Out-File -FilePath "test/test.json" -InputObject ${{ needs.first-job.outputs.test_output }} -Encoding UTF8
+      - name: open the file
+        run: |
+          Get-Content test/test.json
+    
