@@ -18,8 +18,8 @@ jobs:
         run: |
           echo "{
             \"test\": \"test\"
-          }" > test.json
-          echo "::set-output name=TEST::test.json"
+          }" >> test.json
+          Write-Output "::set-output name=TEST::test.json"
 
   second-job:
     runs-on: windows-latest
@@ -29,4 +29,5 @@ jobs:
         run: echo ${{ needs.first-job.outputs.test_output }} >> test.json
       - name: open the file
         run: |
-         echo Get-Content test.json
+          $file = Get-Content test.json
+          echo $file
