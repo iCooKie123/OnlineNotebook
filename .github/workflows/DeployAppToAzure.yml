@@ -102,7 +102,9 @@ jobs:
         shell: pwsh
         id: open_swagger_file
         run: |
-          echo "::set-output name=SWAGGER_FILE=Get-Content ${{ steps.create_swagger_json.outputs.SWAGGER_JSON_PATH }} "
+          $json = Get-Content ${{ steps.create_swagger_json.outputs.SWAGGER_JSON_PATH }}
+          echo "::set-output name=SWAGGER_FILE= $json"
+          echo $json
   deploy:
     if: ${{ !github.event.act }}
     runs-on: windows-latest
