@@ -9,7 +9,6 @@ env:
 
 jobs:
   first-job:
-    if: contains(github.event.head_commit.message, '#update-database')
     runs-on: windows-latest
     outputs:
       test_output: ${{ steps.first-job.outputs.TEST }}
@@ -19,9 +18,30 @@ jobs:
         run: |
           echo "Hello, World!"
           echo "::set-output name=TEST::Hello, World!"
+      - name: create a json file
+        run: echo "Hello, World!" > test.json
+      - name: upload to artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: test.json
+          path: test.json
+
   second-job:
     runs-on: windows-latest
     needs: first-job
     steps:
       - name: second step
         run: echo ${{ needs.first-job.outputs.test_output }}
+      - name: cat the file
+        run: cat ${{ needs.first-job.outputs.test_output }}
+      - name: write to file
+        run: echo "Hello, World!" > ${{ needs.first-job.outputs.test_output }}
+      - name: download from artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: test.json
+          path: test.json
+      - name: cat the file
+        run: cat test.json
+      - name: write to file
+        run: echo "Hello, World!" > test.json

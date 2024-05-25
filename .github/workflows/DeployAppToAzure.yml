@@ -105,6 +105,7 @@ jobs:
   deploy:
     if: ${{ !github.event.act }}
     runs-on: windows-latest
+    options: --user root
     needs: build
     steps:
       - name: Check dir command
