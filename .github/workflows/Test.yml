@@ -32,10 +32,6 @@ jobs:
     steps:
       - name: second step
         run: echo ${{ needs.first-job.outputs.test_output }}
-      - name: cat the file
-        run: cat ${{ needs.first-job.outputs.test_output }}
-      - name: write to file
-        run: echo "Hello, World!" > ${{ needs.first-job.outputs.test_output }}
       - name: download from artifacts
         uses: actions/download-artifact@v2
         with:
