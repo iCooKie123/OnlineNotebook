@@ -117,11 +117,6 @@ jobs:
         with:
           name: webapp
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-      - name: Download swagger Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: swagger
-          path: ${{ needs.build.outputs.swagger-path }}
       - name: Copy json file to working directory
         run: cp ${{ needs.build.outputs.swagger-path }} ${{ env.WORKING_DIRECTORY }}/swagger.json
       - name: Deploy to Azure WebApp
