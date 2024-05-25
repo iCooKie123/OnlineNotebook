@@ -108,17 +108,11 @@ jobs:
     runs-on: windows-latest
     needs: build
     steps:
-      - name: Check dir command
-        shell: pwsh
-        run: |
-          dir -r swagger.json
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: webapp
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-      - name: Copy json file to working directory
-        run: cp ${{ needs.build.outputs.swagger-path }} ${{ env.WORKING_DIRECTORY }}/swagger.json
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
@@ -131,10 +125,9 @@ jobs:
           creds: ${{ secrets.AZURE_SECRET }}
       - name: Write to swagger file
         id: writeSwaggerFile
-        run: echo ${{ needs.build.outputs.swagger-file }} > swagger.json
+        run: echo ${{ needs.build.outputs.swagger-file }} > swagger_file.json
       - name: Import API into Azure API Management
-        run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path swagger.json --specification-format OpenApi --subscription-required false
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+        run: az apim api import --path "${{ env.AZURE_APIM_RESOURCE_PATH }}" --resource-group "${{ env.AZURE_APIM_RESOURCEGROUP }}" --service-name "${{ env.AZURE_APIM_SERVICENAME }}" --api-id "${{ env.AZURE_APIM_API_ID }}" --service-url "${{ env.AZURE_APIM_APPSERVICEURL }}" --specification-path swagger_file.json --specification-format OpenApi --subscription-required false
       - name: logout
         run: >
           az logout
