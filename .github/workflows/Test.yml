@@ -20,15 +20,13 @@ jobs:
             \"test\": \"test\"
           }" > test.json
           echo "::set-output name=TEST::test.json"
-     
+
   second-job:
     runs-on: windows-latest
     needs: first-job
     steps:
       - name: Read from a json file
-        run: |
-          Out-File -FilePath "test/test.json" -InputObject ${{ needs.first-job.outputs.test_output }} -Encoding UTF8
+        run: echo ${{ needs.first-job.outputs.test_output }} >> test.json
       - name: open the file
         run: |
           Get-Content test/test.json
-    
