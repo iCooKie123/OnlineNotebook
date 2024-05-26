@@ -48,6 +48,7 @@ jobs:
           files: "**/appsettings.json"
           key-value-pairs: |
             ConnectionStrings.DefaultConnection=${{  secrets.DatabaseConnectionString }}
+            AllowedHosts= yellow-river-077e4d00f.5.azurestaticapps.net
       - name: Restore
         run: dotnet restore ${{ env.WORKING_DIRECTORY }}
       - name: Build
