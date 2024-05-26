@@ -6,6 +6,7 @@ on:
         description: "Select the job to run"
         required: true
         default: "build"
+        type: choice
         options:
           - "build"
           - "db deploy"
