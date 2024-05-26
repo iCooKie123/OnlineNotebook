@@ -1,8 +1,15 @@
 name: Build and deploy .NET Core application to Web App OnlineNotebook20240523183558 with API Management Service OnlineNotebookapi-OnlineNotebook
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
+    inputs:
+      job-to-run:
+        description: "Select the job to run"
+        required: true
+        default: "build"
+        options:
+          - "build"
+          - "db deploy"
+          - "both"
 
 env:
   AZURE_WEBAPP_NAME: OnlineNotebook20240523183558
@@ -25,7 +32,7 @@ env:
 jobs:
   build:
     runs-on: windows-latest
-    if: contains(github.event.head_commit.message, '#deploy-app')
+    if: ${{ github.event.inputs.job-to-run == 'build' || github.event.inputs.job-to-run == 'both' }}
     outputs:
       swagger-path: ${{steps.create_swagger_json.outputs.SWAGGER_JSON_PATH}}
     steps:
@@ -111,7 +118,7 @@ jobs:
   run-database-deployment-project:
     runs-on: windows-latest
     needs: build
-    if: contains(github.event.head_commit.message, '#deploy-database')
+    if: ${{ github.event.inputs.job-to-run == 'db deploy' || github.event.inputs.job-to-run == 'both' }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET SDK
