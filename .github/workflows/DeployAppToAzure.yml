@@ -22,8 +22,6 @@ env:
   AZURE_APIM_APPSERVICEURL: https://onlinenotebook20240523183558.azurewebsites.net
   SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.6.2 #latest stable release at the time
   SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
-  API_IMPORT_SPECIFICATION_PATH: OnlineNotebook\publish\swagger.json
-  API_IMPORT_DLL: OnlineNotebook\bin\Release\net8.0\OnlineNotebook.dll
   API_IMPORT_VERSION: v1
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
