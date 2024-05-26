@@ -32,8 +32,6 @@ jobs:
   build:
     runs-on: windows-latest
     if: ${{ github.event.inputs.job-to-run == 'build' || github.event.inputs.job-to-run == 'both' }}
-    outputs:
-      swagger-path: ${{steps.create_swagger_json.outputs.SWAGGER_JSON_PATH}}
     steps:
       - uses: actions/checkout@v4
       - name: Setup .NET SDK
@@ -116,7 +114,6 @@ jobs:
           az logout
   run-database-deployment-project:
     runs-on: windows-latest
-    needs: build
     if: ${{ github.event.inputs.job-to-run == 'db deploy' || github.event.inputs.job-to-run == 'both' }}
     steps:
       - uses: actions/checkout@v4
