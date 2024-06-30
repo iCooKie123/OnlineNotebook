@@ -20,7 +20,7 @@ env:
   AZURE_APIM_SERVICENAME: OnlineNotebookapi
   AZURE_APIM_API_ID: OnlineNotebook
   AZURE_APIM_APPSERVICEURL: https://onlinenotebook20240523183558.azurewebsites.net
-  SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.6.2 #latest stable release at the time
+  SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.6.2 
   SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
   API_IMPORT_VERSION: v1
   CONFIGURATION: Release
@@ -112,6 +112,8 @@ jobs:
       - name: logout
         run: >
           az logout
+
+  
   run-database-deployment-project:
     runs-on: windows-latest
     if: ${{ github.event.inputs.job-to-run == 'db deploy' || github.event.inputs.job-to-run == 'both' }}

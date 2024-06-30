@@ -62,14 +62,7 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
             Role = role;
         }
 
-        public void UpdateEmail(string email) => Email = email;
 
         public void UpdatePassword(string password) => Password = password;
-
-        public void UpdateFirstName(string firstName) => FirstName = firstName;
-
-        public void UpdateLastName(string lastName) => LastName = lastName;
-
-        public void UpdateYearOfStudy(int? yearOfStudy) => YearOfStudy = yearOfStudy;
     }
 }

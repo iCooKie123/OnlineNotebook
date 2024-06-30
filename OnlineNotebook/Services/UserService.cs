@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using OnlineNotebook.Controllers.CustomExceptions;
 using OnlineNotebook.DatabaseConfigurations;
-using OnlineNotebook.DatabaseConfigurations.Entities;
 using OnlineNotebook.Queries;
 using OnlineNotebook.Services.Abstractions;
 
@@ -19,19 +18,6 @@ namespace OnlineNotebook.Services
             _mapper = mapper;
         }
 
-        public void AddUser(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<UserDTO> GetUserByEmailAsync(string email)
-        {
-            var user = _dbContext.Users.FirstOrDefault(x => x.Email == email);
-            return user != null
-                ? Task.FromResult(_mapper.Map<UserDTO>(user))
-                : throw new NotFoundException("user not found");
-        }
-
         public async Task<IEnumerable<UserDTO>> GetUsers()
         {
             var users = await _dbContext.Users.ToListAsync();
@@ -40,7 +26,6 @@ namespace OnlineNotebook.Services
 
         public async Task<UserDTO> Login(string email, string password)
         {
-            // throw new ForbiddenException("The email or the password was incorrect");
             var user = await _dbContext
                 .Users.Where(u => u.Email == email && u.Password == password)
                 .FirstOrDefaultAsync();
@@ -48,11 +33,6 @@ namespace OnlineNotebook.Services
             return user == null
                 ? throw new ForbiddenException("The email or the password was incorrect")
                 : _mapper.Map<UserDTO>(user);
-        }
-
-        public void UpdateUser(User user)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<string> UpdateUserPassword(string oldPassword, string newPassword, int? userId)

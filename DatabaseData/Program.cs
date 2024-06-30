@@ -213,6 +213,26 @@ namespace DatabaseData
             }
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public static class ConfigurationHelper
         {
             public static string GetConfigValue(string projectName, string key)

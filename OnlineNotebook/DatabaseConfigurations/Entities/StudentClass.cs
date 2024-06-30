@@ -18,9 +18,5 @@ namespace OnlineNotebook.DatabaseConfigurations.Entities
         }
 
         public void UpdateGrade(int? grade) => Grade = grade;
-
-        public void UpdateClass(StudyClass @class) => Class = @class;
-
-        public void UpdateStudent(User student) => Student = student;
     }
 }
